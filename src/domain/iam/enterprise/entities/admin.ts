@@ -2,7 +2,6 @@ import { Entity } from "@/core/entity/entity";
 import type { UniqueEntityID } from "@/core/entity/unique-entity-id";
 
 export interface AdminProps {
-  cpf: string;
   email: string;
   name: string;
   password: string;
