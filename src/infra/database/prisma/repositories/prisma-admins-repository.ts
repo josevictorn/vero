@@ -1,4 +1,5 @@
 import { Inject, Injectable } from "@nestjs/common";
+import { UserRole } from "@prisma/client";
 import type { AdminsRepository } from "@/domain/iam/application/repositories/admins-repository.ts";
 import type { Admin } from "@/domain/iam/enterprise/entities/admin.ts";
 import { PrismaAdminMapper } from "@/infra/database/prisma/mappers/prisma-admin-mapper.ts";
@@ -12,6 +13,7 @@ export class PrismaAdminsRepository implements AdminsRepository {
     const admin = await this.prisma.user.findUnique({
       where: {
         email: Email,
+        role: UserRole.ADMIN,
       },
     });
 
