@@ -2,7 +2,8 @@ import { Injectable } from "@nestjs/common";
 import type { AdminsRepository } from "@/domain/iam/application/repositories/admins-repository";
 import type { Admin } from "@/domain/iam/enterprise/entities/admin";
 import { PrismaAdminMapper } from "../mappers/prisma-admin-mapper";
-import type { PrismaService } from "../prisma.service";
+// biome-ignore lint/style/useImportType: PrismaService must be imported at runtime so NestJS can emit dependency injection metadata (emitDecoratorMetadata); using import type erases the symbol at build time and can break DI.
+import { PrismaService } from "../prisma.service";
 
 @Injectable()
 export class PrismaAdminsRepository implements AdminsRepository {
