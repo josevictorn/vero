@@ -1,7 +1,10 @@
+import { Injectable } from "@nestjs/common";
 import { type Either, left, right } from "@/core/either";
 import { Admin } from "../../enterprise/entities/admin";
-import type { HashGenerator } from "../cryptography/hash-generator";
-import type { AdminsRepository } from "../repositories/admins-repository";
+// biome-ignore lint/style/useImportType: HashGenerator must be imported at runtime so NestJS can emit dependency injection metadata (emitDecoratorMetadata); using import type erases the symbol at build time and can break DI.
+import { HashGenerator } from "../cryptography/hash-generator";
+// biome-ignore lint/style/useImportType: AdminsRepository must be imported at runtime so NestJS can emit dependency injection metadata (emitDecoratorMetadata); using import type erases the symbol at build time and can break DI.
+import { AdminsRepository } from "../repositories/admins-repository";
 import { AdminAlreadyExistsError } from "./errors/admin-already-exists-error";
 
 interface RegisterAdminUseCaseRequest {
@@ -15,6 +18,7 @@ type RegisterAdminUseCaseResponse = Either<
   { admin: Admin }
 >;
 
+@Injectable()
 export class RegisterAdminUseCase {
   constructor(
     private readonly adminsRepository: AdminsRepository,
