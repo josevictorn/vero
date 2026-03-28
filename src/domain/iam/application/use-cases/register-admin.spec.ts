@@ -1,7 +1,7 @@
 import { FakeHasher } from "test/cryptography/fake-hasher";
 import { InMemoryAdminsRepository } from "test/repositories/in-memory-admins-repository";
-import { AdminAlreadyExistsError } from "./errors/admin-already-exists-error";
-import { RegisterAdminUseCase } from "./register-admin";
+import { AdminAlreadyExistsError } from "./errors/admin-already-exists-error.ts";
+import { RegisterAdminUseCase } from "./register-admin.ts";
 
 let inMemoryAdminsRepository: InMemoryAdminsRepository;
 let fakeHasher: FakeHasher;

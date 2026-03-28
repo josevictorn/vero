@@ -1,7 +1,7 @@
 import { Module } from "@nestjs/common";
-import { HashComparer } from "@/domain/iam/application/cryptography/hash-comparer";
-import { HashGenerator } from "@/domain/iam/application/cryptography/hash-generator";
-import { ArgonHasher } from "./argon-hasher";
+import { HashComparer } from "@/domain/iam/application/cryptography/hash-comparer.ts";
+import { HashGenerator } from "@/domain/iam/application/cryptography/hash-generator.ts";
+import { ArgonHasher } from "@/infra/cryptography/argon-hasher.ts";
 
 @Module({
   providers: [

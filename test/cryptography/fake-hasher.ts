@@ -1,5 +1,5 @@
-import type { HashComparer } from "@/domain/iam/application/cryptography/hash-comparer";
-import type { HashGenerator } from "@/domain/iam/application/cryptography/hash-generator";
+import type { HashComparer } from "@/domain/iam/application/cryptography/hash-comparer.ts";
+import type { HashGenerator } from "@/domain/iam/application/cryptography/hash-generator.ts";
 
 export class FakeHasher implements HashGenerator, HashComparer {
   hash(plain: string) {

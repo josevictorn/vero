@@ -1,5 +1,5 @@
-import type { AdminsRepository } from "@/domain/iam/application/repositories/admins-repository";
-import type { Admin } from "@/domain/iam/enterprise/entities/admin";
+import type { AdminsRepository } from "@/domain/iam/application/repositories/admins-repository.ts";
+import type { Admin } from "@/domain/iam/enterprise/entities/admin.ts";
 
 export class InMemoryAdminsRepository implements AdminsRepository {
   // biome-ignore lint/style/useConsistentMemberAccessibility: This is a test class, so we can keep the items array public for easier access in tests.

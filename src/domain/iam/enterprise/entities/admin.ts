@@ -1,5 +1,5 @@
-import { Entity } from "@/core/entity/entity";
-import type { UniqueEntityID } from "@/core/entity/unique-entity-id";
+import { Entity } from "@/core/entity/entity.ts";
+import type { UniqueEntityID } from "@/core/entity/unique-entity-id.ts";
 
 export interface AdminProps {
   email: string;

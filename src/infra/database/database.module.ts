@@ -1,7 +1,7 @@
 import { Module } from "@nestjs/common";
-import { AdminsRepository } from "@/domain/iam/application/repositories/admins-repository";
-import { PrismaService } from "./prisma/prisma.service";
-import { PrismaAdminsRepository } from "./prisma/repositories/prisma-admins-repository";
+import { AdminsRepository } from "@/domain/iam/application/repositories/admins-repository.ts";
+import { PrismaService } from "@/infra/database/prisma/prisma.service.ts";
+import { PrismaAdminsRepository } from "@/infra/database/prisma/repositories/prisma-admins-repository.ts";
 
 @Module({
   providers: [

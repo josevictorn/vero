@@ -1,11 +1,9 @@
-import { Injectable } from "@nestjs/common";
-import { type Either, left, right } from "@/core/either";
-import { Admin } from "../../enterprise/entities/admin";
-// biome-ignore lint/style/useImportType: HashGenerator must be imported at runtime so NestJS can emit dependency injection metadata (emitDecoratorMetadata); using import type erases the symbol at build time and can break DI.
-import { HashGenerator } from "../cryptography/hash-generator";
-// biome-ignore lint/style/useImportType: AdminsRepository must be imported at runtime so NestJS can emit dependency injection metadata (emitDecoratorMetadata); using import type erases the symbol at build time and can break DI.
-import { AdminsRepository } from "../repositories/admins-repository";
-import { AdminAlreadyExistsError } from "./errors/admin-already-exists-error";
+import { Inject, Injectable } from "@nestjs/common";
+import { type Either, left, right } from "@/core/either.ts";
+import { Admin } from "@/domain/iam/enterprise/entities/admin.ts";
+import { HashGenerator } from "@/domain/iam/application/cryptography/hash-generator.ts";
+import { AdminsRepository } from "@/domain/iam/application/repositories/admins-repository.ts";
+import { AdminAlreadyExistsError } from "@/domain/iam/application/use-cases/errors/admin-already-exists-error.ts";
 
 interface RegisterAdminUseCaseRequest {
   email: string;
@@ -21,7 +19,9 @@ type RegisterAdminUseCaseResponse = Either<
 @Injectable()
 export class RegisterAdminUseCase {
   constructor(
+    @Inject(AdminsRepository)
     private readonly adminsRepository: AdminsRepository,
+    @Inject(HashGenerator)
     private readonly hashGenerator: HashGenerator
   ) {}
 

@@ -1,6 +1,6 @@
 import { hash, verify } from "argon2";
-import type { HashComparer } from "@/domain/iam/application/cryptography/hash-comparer";
-import type { HashGenerator } from "@/domain/iam/application/cryptography/hash-generator";
+import type { HashComparer } from "@/domain/iam/application/cryptography/hash-comparer.ts";
+import type { HashGenerator } from "@/domain/iam/application/cryptography/hash-generator.ts";
 
 export class ArgonHasher implements HashGenerator, HashComparer {
   async hash(value: string): Promise<string> {

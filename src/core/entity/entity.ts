@@ -1,4 +1,4 @@
-import { UniqueEntityID } from "./unique-entity-id";
+import { UniqueEntityID } from "./unique-entity-id.ts";
 
 export abstract class Entity<Props> {
   private readonly _id: UniqueEntityID;

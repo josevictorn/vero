@@ -1,8 +1,8 @@
 import type { INestApplication } from "@nestjs/common";
 import { Test } from "@nestjs/testing";
 import request from "supertest";
-import { AppModule } from "@/infra/app.module";
-import { PrismaService } from "@/infra/database/prisma/prisma.service";
+import { AppModule } from "@/infra/app.module.ts";
+import { PrismaService } from "@/infra/database/prisma/prisma.service.ts";
 
 describe("Register Admin Controller (e2e)", () => {
   let app: INestApplication;

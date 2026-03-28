@@ -1,11 +1,13 @@
-import { Injectable } from "@nestjs/common";
-// biome-ignore lint/style/useImportType: ConfigService must be imported at runtime so NestJS can emit dependency injection metadata (emitDecoratorMetadata); using import type erases the symbol at build time and can cause UnknownDependenciesException.
+import { Inject, Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
-import type { Env } from "./env";
+import type { Env } from "@/infra/env/env.ts";
 
 @Injectable()
 export class EnvService {
-  constructor(private readonly configService: ConfigService<Env, true>) {}
+  constructor(
+    @Inject(ConfigService)
+    private readonly configService: ConfigService<Env, true>
+  ) {}
 
   get<T extends keyof Env>(key: T) {
     return this.configService.get(key, { infer: true });

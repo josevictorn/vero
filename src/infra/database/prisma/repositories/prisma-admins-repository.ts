@@ -1,13 +1,12 @@
-import { Injectable } from "@nestjs/common";
-import type { AdminsRepository } from "@/domain/iam/application/repositories/admins-repository";
-import type { Admin } from "@/domain/iam/enterprise/entities/admin";
-import { PrismaAdminMapper } from "../mappers/prisma-admin-mapper";
-// biome-ignore lint/style/useImportType: PrismaService must be imported at runtime so NestJS can emit dependency injection metadata (emitDecoratorMetadata); using import type erases the symbol at build time and can break DI.
-import { PrismaService } from "../prisma.service";
+import { Inject, Injectable } from "@nestjs/common";
+import type { AdminsRepository } from "@/domain/iam/application/repositories/admins-repository.ts";
+import type { Admin } from "@/domain/iam/enterprise/entities/admin.ts";
+import { PrismaAdminMapper } from "@/infra/database/prisma/mappers/prisma-admin-mapper.ts";
+import { PrismaService } from "@/infra/database/prisma/prisma.service.ts";
 
 @Injectable()
 export class PrismaAdminsRepository implements AdminsRepository {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(@Inject(PrismaService) private readonly prisma: PrismaService) {}
 
   async findByEmail(Email: string): Promise<Admin | null> {
     const admin = await this.prisma.user.findUnique({

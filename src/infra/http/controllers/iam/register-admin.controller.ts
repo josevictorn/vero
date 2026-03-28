@@ -4,14 +4,14 @@ import {
   ConflictException,
   Controller,
   HttpCode,
+  Inject,
   Post,
   UsePipes,
 } from "@nestjs/common";
 import { z } from "zod";
-import { AdminAlreadyExistsError } from "@/domain/iam/application/use-cases/errors/admin-already-exists-error";
-// biome-ignore lint/style/useImportType: RegisterAdminUseCase must be imported at runtime so NestJS can emit dependency injection metadata (emitDecoratorMetadata); using import type erases the symbol at build time and can break DI.
-import { RegisterAdminUseCase } from "@/domain/iam/application/use-cases/register-admin";
-import { ZodValidationPipe } from "../../pipes/zod-validation-pipe";
+import { AdminAlreadyExistsError } from "@/domain/iam/application/use-cases/errors/admin-already-exists-error.ts";
+import { RegisterAdminUseCase } from "@/domain/iam/application/use-cases/register-admin.ts";
+import { ZodValidationPipe } from "@/infra/http/pipes/zod-validation-pipe.ts";
 
 const registerAdminBodySchema = z.object({
   name: z.string(),
@@ -23,7 +23,10 @@ type RegisterAdminBodySchema = z.infer<typeof registerAdminBodySchema>;
 
 @Controller("/accounts/admin")
 export class RegisterAdminController {
-  constructor(private readonly registerAdmin: RegisterAdminUseCase) {}
+  constructor(
+    @Inject(RegisterAdminUseCase)
+    private readonly registerAdmin: RegisterAdminUseCase
+  ) {}
 
   @Post()
   @HttpCode(201)

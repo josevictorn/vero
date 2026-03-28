@@ -3,8 +3,8 @@ import {
   type User as PrismaAdmin,
   UserRole,
 } from "generated/prisma/client";
-import { UniqueEntityID } from "@/core/entity/unique-entity-id";
-import { Admin } from "@/domain/iam/enterprise/entities/admin";
+import { UniqueEntityID } from "@/core/entity/unique-entity-id.ts";
+import { Admin } from "@/domain/iam/enterprise/entities/admin.ts";
 
 export class PrismaAdminMapper {
   static toDomain(raw: PrismaAdmin): Admin {
