@@ -7,7 +7,6 @@ export default defineConfig({
     globals: true,
     root: "./",
   },
-  oxc: false,
   plugins: [
     tsconfigPaths(),
     swc.vite({
