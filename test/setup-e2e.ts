@@ -8,7 +8,8 @@ config({ path: ".env", override: true });
 config({ path: ".env.test", override: true });
 
 const connectionString = `${process.env.DATABASE_URL}`;
-const adapter = new PrismaPg({ connectionString });
+const schema = new URL(connectionString).searchParams.get("schema") || "public";
+const adapter = new PrismaPg({ connectionString }, { schema });
 
 const prisma = new PrismaClient({ adapter });
 

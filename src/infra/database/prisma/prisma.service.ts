@@ -13,7 +13,10 @@ export class PrismaService
 {
   constructor() {
     const connectionString = `${process.env.DATABASE_URL}`;
-    const adapter = new PrismaPg({ connectionString });
+    const schema =
+      new URL(connectionString).searchParams.get("schema") || "public";
+
+    const adapter = new PrismaPg({ connectionString }, { schema });
 
     super({
       log: ["error", "warn"],
