@@ -9,22 +9,22 @@ import {
 } from "@nestjs/common";
 import { ApiBody, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { z } from "zod";
-import { AuthenticateAdminUseCase } from "@/domain/iam/application/use-cases/authenticate-admin";
+import { AuthenticateUseCase } from "@/domain/iam/application/use-cases/authenticate";
 import { WrongCredentialsError } from "@/domain/iam/application/use-cases/errors/wrong-credentials-error";
 
-const authenticateAdminBodySchema = z.object({
+const authenticateBodySchema = z.object({
   email: z.email(),
   password: z.string().min(6),
 });
 
-type AuthenticateAdminBodySchema = z.infer<typeof authenticateAdminBodySchema>;
+type AuthenticateBodySchema = z.infer<typeof authenticateBodySchema>;
 
 @ApiTags("Accounts")
-@Controller("/accounts/admin/authenticate")
-export class AuthenticateAdminController {
+@Controller("/accounts/authenticate")
+export class AuthenticateController {
   constructor(
-    @Inject(AuthenticateAdminUseCase)
-    private readonly authenticateAdmin: AuthenticateAdminUseCase
+    @Inject(AuthenticateUseCase)
+    private readonly authenticate: AuthenticateUseCase
   ) {}
 
   @Post()
@@ -36,7 +36,7 @@ export class AuthenticateAdminController {
         email: {
           type: "string",
           format: "email",
-          example: "admin@example.com",
+          example: "account@example.com",
         },
         password: { type: "string", minLength: 6, example: "password123" },
       },
@@ -45,7 +45,7 @@ export class AuthenticateAdminController {
   })
   @ApiResponse({
     status: 200,
-    description: "Admin authenticated successfully",
+    description: "Account authenticated successfully",
     schema: {
       type: "object",
       properties: {
@@ -80,10 +80,10 @@ export class AuthenticateAdminController {
       },
     },
   })
-  async handle(@Body() body: AuthenticateAdminBodySchema) {
+  async handle(@Body() body: AuthenticateBodySchema) {
     const { email, password } = body;
 
-    const result = await this.authenticateAdmin.execute({
+    const result = await this.authenticate.execute({
       email,
       password,
     });

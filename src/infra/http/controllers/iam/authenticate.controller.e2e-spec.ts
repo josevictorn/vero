@@ -2,35 +2,35 @@ import type { INestApplication } from "@nestjs/common";
 import { Test } from "@nestjs/testing";
 import { hash } from "argon2";
 import request from "supertest";
-import { AdminFactory } from "test/factories/make-admin";
+import { AccountFactory } from "test/factories/make-account";
 import { AppModule } from "@/infra/app.module";
 import { DatabaseModule } from "@/infra/database/database.module";
 
-describe("Authenticate Admin Controller (e2e)", () => {
+describe("Authenticate Controller (e2e)", () => {
   let app: INestApplication;
-  let adminFactory: AdminFactory;
+  let accountFactory: AccountFactory;
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule, DatabaseModule],
-      providers: [AdminFactory],
+      providers: [AccountFactory],
     }).compile();
 
     app = moduleRef.createNestApplication();
 
-    adminFactory = moduleRef.get(AdminFactory);
+    accountFactory = moduleRef.get(AccountFactory);
 
     await app.init();
   });
 
-  test("[POST] /accounts/admin/authenticate", async () => {
-    await adminFactory.makePrismaAdmin({
+  test("[POST] /accounts/authenticate", async () => {
+    await accountFactory.makePrismaAccount({
       email: "admin@example.com",
       password: await hash("password123"),
     });
 
     const response = await request(app.getHttpServer())
-      .post("/accounts/admin/authenticate")
+      .post("/accounts/authenticate")
       .send({
         email: "admin@example.com",
         password: "password123",
