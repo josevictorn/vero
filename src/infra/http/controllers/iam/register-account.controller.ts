@@ -17,7 +17,6 @@ const registerAccountBodySchema = z.object({
   name: z.string(),
   email: z.email(),
   role: z.enum(UserRole),
-  password: z.string().min(6),
 });
 
 type RegisterAccountBodySchema = z.infer<typeof registerAccountBodySchema>;
@@ -53,37 +52,13 @@ export class RegisterAccountController {
           ],
           example: UserRole.CLIENT,
         },
-        password: { type: "string", minLength: 6, example: "password123" },
       },
-      required: ["name", "email", "role", "password"],
+      required: ["name", "email", "role"],
     },
   })
   @ApiResponse({
     status: 201,
     description: "Account created successfully",
-    schema: {
-      type: "object",
-      properties: {
-        account: {
-          type: "object",
-          properties: {
-            id: { type: "string", format: "uuid" },
-            name: { type: "string" },
-            email: { type: "string", format: "email" },
-            role: {
-              type: "string",
-              enum: [
-                UserRole.ADMIN,
-                UserRole.CLIENT,
-                UserRole.ASSISTANT,
-                UserRole.FINANCE,
-                UserRole.LAWYER,
-              ],
-            },
-          },
-        },
-      },
-    },
   })
   @ApiResponse({
     status: 400,
@@ -103,13 +78,13 @@ export class RegisterAccountController {
     },
   })
   async handle(@Body() body: RegisterAccountBodySchema) {
-    const { name, email, role, password } = body;
+    const { name, email, role } = body;
 
     const result = await this.registerAccount.execute({
       name,
       email,
       role,
-      password,
+      password: "default-password", // You should implement a proper password handling strategy
     });
 
     if (result.isLeft()) {

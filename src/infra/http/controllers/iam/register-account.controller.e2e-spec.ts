@@ -26,7 +26,6 @@ describe("Register Admin Controller (e2e)", () => {
       name: "John Doe",
       email: "john.doe@example.com",
       role: UserRole.CLIENT,
-      password: "password123",
     });
 
     expect(response.status).toBe(201);
