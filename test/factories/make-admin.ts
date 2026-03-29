@@ -1,5 +1,6 @@
 import { faker } from "@faker-js/faker/locale/pt_BR";
 import { Inject, Injectable } from "@nestjs/common";
+import { UserRole } from "generated/prisma/client";
 import type { UniqueEntityID } from "@/core/entity/unique-entity-id";
 import { Admin, type AdminProps } from "@/domain/iam/enterprise/entities/admin";
 import { PrismaAdminMapper } from "@/infra/database/prisma/mappers/prisma-admin-mapper";
@@ -13,6 +14,7 @@ export function makeAdmin(
     {
       name: faker.person.fullName(),
       email: faker.internet.email(),
+      role: UserRole.ADMIN,
       password: faker.internet.password(),
       ...override,
     },
