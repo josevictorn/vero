@@ -13,6 +13,7 @@ export class PrismaAdminMapper {
         name: raw.name,
         email: raw.email,
         password: raw.password,
+        role: raw.role,
       },
       new UniqueEntityID(raw.id)
     );
