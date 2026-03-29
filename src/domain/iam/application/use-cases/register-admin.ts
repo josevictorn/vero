@@ -1,10 +1,10 @@
 import { Inject, Injectable } from "@nestjs/common";
-import { UserRole } from "@prisma/client";
 import { type Either, left, right } from "@/core/either.ts";
 import { HashGenerator } from "@/domain/iam/application/cryptography/hash-generator.ts";
 import { AdminsRepository } from "@/domain/iam/application/repositories/admins-repository.ts";
 import { AdminAlreadyExistsError } from "@/domain/iam/application/use-cases/errors/admin-already-exists-error.ts";
 import { Admin } from "@/domain/iam/enterprise/entities/admin.ts";
+import { UserRole } from "../../enterprise/entities/value-objects/user-role";
 
 interface RegisterAdminUseCaseRequest {
   email: string;

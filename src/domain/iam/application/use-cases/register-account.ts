@@ -1,7 +1,7 @@
 import { Inject, Injectable } from "@nestjs/common";
-import type { UserRole } from "@prisma/client";
 import { type Either, left, right } from "@/core/either";
 import { Account } from "../../enterprise/entities/account";
+import type { UserRole } from "../../enterprise/entities/value-objects/user-role";
 import { HashGenerator } from "../cryptography/hash-generator";
 import { AccountsRepository } from "../repositories/accounts-repository";
 import { AccountAlreadyExistsError } from "./errors/account-already-exists-error";

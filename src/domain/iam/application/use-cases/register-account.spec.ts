@@ -1,6 +1,6 @@
-import { UserRole } from "@prisma/client";
 import { FakeHasher } from "test/cryptography/fake-hasher";
 import { InMemoryAccountsRepository } from "test/repositories/in-memory-accounts-repository";
+import { UserRole } from "../../enterprise/entities/value-objects/user-role";
 import { AccountAlreadyExistsError } from "./errors/account-already-exists-error";
 import { RegisterAccountUseCase } from "./register-account";
 

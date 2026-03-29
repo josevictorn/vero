@@ -8,10 +8,10 @@ import {
   Post,
 } from "@nestjs/common";
 import { ApiBody, ApiResponse, ApiTags } from "@nestjs/swagger";
-import { UserRole } from "generated/prisma/enums";
 import { z } from "zod";
 import { AccountAlreadyExistsError } from "@/domain/iam/application/use-cases/errors/account-already-exists-error";
 import { RegisterAccountUseCase } from "@/domain/iam/application/use-cases/register-account";
+import { UserRole } from "@/domain/iam/enterprise/entities/value-objects/user-role";
 
 const registerAccountBodySchema = z.object({
   name: z.string(),
