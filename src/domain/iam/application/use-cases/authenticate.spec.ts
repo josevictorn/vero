@@ -1,36 +1,36 @@
 import { FakeEncrypter } from "test/cryptography/fake-encrypter.ts";
 import { FakeHasher } from "test/cryptography/fake-hasher.ts";
-import { makeAdmin } from "test/factories/make-admin.ts";
-import { InMemoryAdminsRepository } from "test/repositories/in-memory-admins-repository.ts";
-import { AuthenticateAdminUseCase } from "./authenticate-admin.ts";
+import { makeAccount } from "test/factories/make-account.ts";
+import { InMemoryAccountsRepository } from "test/repositories/in-memory-accounts-repository.ts";
+import { AuthenticateUseCase } from "./authenticate.ts";
 import { WrongCredentialsError } from "./errors/wrong-credentials-error.ts";
 
-let inMemoryAdminsRepository: InMemoryAdminsRepository;
+let inMemoryAccountsRepository: InMemoryAccountsRepository;
 let fakeHasher: FakeHasher;
 let fakeEncrypter: FakeEncrypter;
 
-let sut: AuthenticateAdminUseCase;
+let sut: AuthenticateUseCase;
 
-describe("Authenticate Admin Use Case", () => {
+describe("Authenticate Account Use Case", () => {
   beforeEach(() => {
-    inMemoryAdminsRepository = new InMemoryAdminsRepository();
+    inMemoryAccountsRepository = new InMemoryAccountsRepository();
     fakeHasher = new FakeHasher();
     fakeEncrypter = new FakeEncrypter();
 
-    sut = new AuthenticateAdminUseCase(
-      inMemoryAdminsRepository,
+    sut = new AuthenticateUseCase(
+      inMemoryAccountsRepository,
       fakeHasher,
       fakeEncrypter
     );
   });
 
-  it("should be able to authenticate an admin with correct credentials", async () => {
-    const admin = makeAdmin({
+  it("should be able to authenticate an account with correct credentials", async () => {
+    const admin = makeAccount({
       email: "admin@example.com",
       password: await fakeHasher.hash("123456"),
     });
 
-    inMemoryAdminsRepository.items.push(admin);
+    inMemoryAccountsRepository.items.push(admin);
 
     const result = await sut.execute({
       email: "admin@example.com",
@@ -43,13 +43,13 @@ describe("Authenticate Admin Use Case", () => {
     });
   });
 
-  it("should not be able to authenticate an admin with incorrect email", async () => {
-    const admin = makeAdmin({
+  it("should not be able to authenticate an account with incorrect email", async () => {
+    const admin = makeAccount({
       email: "admin@example.com",
       password: await fakeHasher.hash("123456"),
     });
 
-    inMemoryAdminsRepository.items.push(admin);
+    inMemoryAccountsRepository.items.push(admin);
 
     const result = await sut.execute({
       email: "incorrect@example.com",
@@ -60,13 +60,13 @@ describe("Authenticate Admin Use Case", () => {
     expect(result.value).toBeInstanceOf(WrongCredentialsError);
   });
 
-  it("should not be able to authenticate an admin with incorrect password", async () => {
-    const admin = makeAdmin({
+  it("should not be able to authenticate an account with incorrect password", async () => {
+    const admin = makeAccount({
       email: "admin@example.com",
       password: await fakeHasher.hash("123456"),
     });
 
-    inMemoryAdminsRepository.items.push(admin);
+    inMemoryAccountsRepository.items.push(admin);
 
     const result = await sut.execute({
       email: "admin@example.com",

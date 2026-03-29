@@ -2,24 +2,24 @@ import { Inject, Injectable } from "@nestjs/common";
 import { type Either, left, right } from "@/core/either.ts";
 import { Encrypter } from "../cryptography/encrypter.ts";
 import { HashComparer } from "../cryptography/hash-comparer.ts";
-import { AdminsRepository } from "../repositories/admins-repository.ts";
+import { AccountsRepository } from "../repositories/accounts-repository.ts";
 import { WrongCredentialsError } from "./errors/wrong-credentials-error.ts";
 
-interface AuthenticateAdminUseCaseRequest {
+interface AuthenticateUseCaseRequest {
   email: string;
   password: string;
 }
 
-type AuthenticateAdminUseCaseResponse = Either<
+type AuthenticateUseCaseResponse = Either<
   WrongCredentialsError,
   { accessToken: string }
 >;
 
 @Injectable()
-export class AuthenticateAdminUseCase {
+export class AuthenticateUseCase {
   constructor(
-    @Inject(AdminsRepository)
-    private readonly adminsRepository: AdminsRepository,
+    @Inject(AccountsRepository)
+    private readonly accountsRepository: AccountsRepository,
     @Inject(HashComparer)
     private readonly hashComparer: HashComparer,
     @Inject(Encrypter)
@@ -29,16 +29,16 @@ export class AuthenticateAdminUseCase {
   async execute({
     email,
     password,
-  }: AuthenticateAdminUseCaseRequest): Promise<AuthenticateAdminUseCaseResponse> {
-    const admin = await this.adminsRepository.findByEmail(email);
+  }: AuthenticateUseCaseRequest): Promise<AuthenticateUseCaseResponse> {
+    const account = await this.accountsRepository.findByEmail(email);
 
-    if (!admin) {
+    if (!account) {
       return left(new WrongCredentialsError());
     }
 
     const passwordMatches = await this.hashComparer.compare(
       password,
-      admin.password
+      account.password
     );
 
     if (!passwordMatches) {
@@ -46,7 +46,7 @@ export class AuthenticateAdminUseCase {
     }
 
     const accessToken = await this.encrypter.encrypt({
-      sub: admin.id.toString(),
+      sub: account.id.toString(),
     });
 
     return right({ accessToken });
