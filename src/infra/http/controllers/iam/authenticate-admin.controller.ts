@@ -60,6 +60,25 @@ export class AuthenticateAdminController {
   @ApiResponse({
     status: 401,
     description: "Invalid email or password",
+    schema: {
+      type: "object",
+      properties: {
+        statusCode: { type: "number", example: 401 },
+        error: { type: "string", example: "Unauthorized" },
+        message: { type: "string", example: "Credentials are not valid." },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 500,
+    description: "Internal server error",
+    schema: {
+      type: "object",
+      properties: {
+        statusCode: { type: "number", example: 500 },
+        message: { type: "string", example: "Internal server error" },
+      },
+    },
   })
   async handle(@Body() body: AuthenticateAdminBodySchema) {
     const { email, password } = body;
