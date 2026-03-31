@@ -11,6 +11,7 @@ import { ApiBody, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { z } from "zod";
 import { AuthenticateUseCase } from "@/domain/iam/application/use-cases/authenticate";
 import { WrongCredentialsError } from "@/domain/iam/application/use-cases/errors/wrong-credentials-error";
+import { Public } from "@/infra/auth/public";
 
 const authenticateBodySchema = z.object({
   email: z.email(),
@@ -21,6 +22,7 @@ type AuthenticateBodySchema = z.infer<typeof authenticateBodySchema>;
 
 @ApiTags("Accounts")
 @Controller("/accounts/authenticate")
+@Public()
 export class AuthenticateController {
   constructor(
     @Inject(AuthenticateUseCase)
