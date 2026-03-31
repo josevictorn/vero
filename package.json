@@ -27,6 +27,7 @@
     "test:e2e:watch": "vitest --config ./vitest.config.e2e.mts"
   },
   "dependencies": {
+    "@casl/ability": "^6.8.0",
     "@nestjs/common": "^11.0.1",
     "@nestjs/config": "^4.0.3",
     "@nestjs/core": "^11.0.1",
@@ -40,6 +41,7 @@
     "@swc/core": "^1.15.21",
     "@vitest/coverage-v8": "^4.1.2",
     "argon2": "^0.44.0",
+    "passport-jwt": "^4.0.1",
     "pg": "^8.20.0",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
@@ -56,6 +58,7 @@
     "@nestjs/testing": "^11.0.1",
     "@types/express": "^5.0.0",
     "@types/node": "^22.10.7",
+    "@types/passport-jwt": "^4.0.1",
     "@types/pg": "^8.20.0",
     "@types/supertest": "^7.2.0",
     "dotenv": "^17.3.1",
