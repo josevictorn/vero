@@ -6,12 +6,16 @@ import {
   HttpCode,
   Inject,
   Post,
+  UseGuards,
   UsePipes,
 } from "@nestjs/common";
 import { ApiBody, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { z } from "zod";
 import { AdminAlreadyExistsError } from "@/domain/iam/application/use-cases/errors/admin-already-exists-error.ts";
 import { RegisterAdminUseCase } from "@/domain/iam/application/use-cases/register-admin.ts";
+import { Action } from "@/infra/auth/casl/actions";
+import { CheckPolicies } from "@/infra/auth/casl/check-policies.decorator";
+import { PoliciesGuard } from "@/infra/auth/casl/policies.guard";
 import { ZodValidationPipe } from "@/infra/http/pipes/zod-validation-pipe.ts";
 
 const registerAdminBodySchema = z.object({
@@ -32,6 +36,8 @@ export class RegisterAdminController {
 
   @Post()
   @HttpCode(201)
+  @UseGuards(PoliciesGuard)
+  @CheckPolicies((ability) => ability.can(Action.Create, "Account"))
   @ApiBody({
     schema: {
       type: "object",
@@ -67,6 +73,28 @@ export class RegisterAdminController {
   @ApiResponse({
     status: 400,
     description: "Validation failed or other bad request error",
+  })
+  @ApiResponse({
+    status: 403,
+    description:
+      "Forbidden. The user does not have permission to create accounts.",
+    schema: {
+      type: "object",
+      properties: {
+        message: {
+          type: "string",
+          example: "Forbidden resource",
+        },
+        error: {
+          type: "string",
+          example: "Forbidden",
+        },
+        statusCode: {
+          type: "number",
+          example: 403,
+        },
+      },
+    },
   })
   @ApiResponse({
     status: 409,

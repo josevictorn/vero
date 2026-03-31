@@ -12,6 +12,7 @@ async function bootstrap() {
     .setDescription("API documentation for Vero")
     .setVersion("1.0")
     .addTag("vero")
+    .addBearerAuth()
     .build();
 
   const documentFactory = SwaggerModule.createDocument(app, config);

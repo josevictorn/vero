@@ -1,6 +1,6 @@
-import type { UserRole } from "@prisma/client";
 import { Entity } from "@/core/entity/entity.ts";
 import type { UniqueEntityID } from "@/core/entity/unique-entity-id.ts";
+import type { UserRole } from "./value-objects/user-role";
 
 export interface AccountProps {
   email: string;
