@@ -1,7 +1,8 @@
 import { left, right, type Either } from "@/core/either";
 import { AccountNotFoundExistsError } from "./errors/acount-not-found-error";
 import type { Account } from "../../enterprise/entities/account";
-import type { AccountsRepository } from "../repositories/accounts-repository";
+import { AccountsRepository } from "../repositories/accounts-repository";
+import { Inject, Injectable } from "@nestjs/common";
 
 interface GetUserProfileUseCaseRequest {
   userId: string;
@@ -14,8 +15,12 @@ type GetUserProfileUseCaseResponse = Either<
   }
 >
 
+@Injectable()
 export class GetUserProfileUseCase {
-  constructor(private readonly accountsRepository: AccountsRepository) {}
+  constructor(
+    @Inject(AccountsRepository) 
+    private readonly accountsRepository: AccountsRepository
+  ) {}
 
   async execute({userId}: GetUserProfileUseCaseRequest): Promise<GetUserProfileUseCaseResponse> {
     const account = await this.accountsRepository.findById(userId);
