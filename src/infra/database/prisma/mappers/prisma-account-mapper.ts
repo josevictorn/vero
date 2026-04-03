@@ -1,6 +1,7 @@
 import type { Prisma, User as PrismaAccount } from "generated/prisma/client";
 import { UniqueEntityID } from "@/core/entity/unique-entity-id.ts";
 import { Account } from "@/domain/iam/enterprise/entities/account";
+import type { UserRole } from "@/domain/iam/enterprise/entities/value-objects/user-role";
 
 export class PrismaAccountMapper {
   static toDomain(raw: PrismaAccount): Account {
@@ -8,7 +9,7 @@ export class PrismaAccountMapper {
       {
         name: raw.name,
         email: raw.email,
-        role: raw.role,
+        role: raw.role as UserRole,
         password: raw.password,
       },
       new UniqueEntityID(raw.id)
