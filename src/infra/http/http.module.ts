@@ -8,6 +8,8 @@ import { RegisterAdminController } from "@/infra/http/controllers/iam/register-a
 import { CaslModule } from "../auth/casl/casl.module";
 import { AuthenticateController } from "./controllers/iam/authenticate.controller";
 import { RegisterAccountController } from "./controllers/iam/register-account.controller";
+import { GetUserProfileController } from "./controllers/iam/get-user-profile.controller";
+import { GetUserProfileUseCase } from "@/domain/iam/application/use-cases/get-user-profile";
 
 @Module({
   imports: [DatabaseModule, CryptographyModule, CaslModule],
@@ -15,11 +17,13 @@ import { RegisterAccountController } from "./controllers/iam/register-account.co
     RegisterAdminController,
     AuthenticateController,
     RegisterAccountController,
+    GetUserProfileController,
   ],
   providers: [
     RegisterAdminUseCase,
     AuthenticateUseCase,
     RegisterAccountUseCase,
+    GetUserProfileUseCase,
   ],
 })
 export class HttpModule {}
