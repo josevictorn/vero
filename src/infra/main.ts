@@ -6,6 +6,16 @@ import { EnvService } from "@/infra/env/env.service.ts";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  const envService = app.get(EnvService);
+  const corsOrigin = envService.get("CORS_ORIGIN");
+
+  app.enableCors({
+    origin:
+      corsOrigin === "*"
+        ? true
+        : corsOrigin.split(",").map((origin) => origin.trim()),
+    credentials: true,
+  });
 
   const config = new DocumentBuilder()
     .setTitle("Vero API")
@@ -19,7 +29,6 @@ async function bootstrap() {
 
   app.use("/docs", apiReference({ content: documentFactory }));
 
-  const envService = app.get(EnvService);
   const port = envService.get("PORT");
   await app.listen(port);
 }
