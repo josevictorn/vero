@@ -16,6 +16,16 @@ export class InMemoryAccountsRepository implements AccountsRepository {
     return Promise.resolve(admin);
   }
 
+  findById(id: string) {
+    const account = this.items.find((item) => item.id.toString() === id);
+
+    if (!account) {
+      return Promise.resolve(null);
+    }
+
+    return Promise.resolve(account);
+  }
+
   create(admin: Admin) {
     this.items.push(admin);
     return Promise.resolve();
