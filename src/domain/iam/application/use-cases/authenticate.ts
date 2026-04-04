@@ -1,5 +1,6 @@
 import { Inject, Injectable } from "@nestjs/common";
 import { type Either, left, right } from "@/core/either.ts";
+import type { Account } from "../../enterprise/entities/account.ts";
 import { Encrypter } from "../cryptography/encrypter.ts";
 import { HashComparer } from "../cryptography/hash-comparer.ts";
 import { AccountsRepository } from "../repositories/accounts-repository.ts";
@@ -12,7 +13,7 @@ interface AuthenticateUseCaseRequest {
 
 type AuthenticateUseCaseResponse = Either<
   WrongCredentialsError,
-  { accessToken: string }
+  { accessToken: string; user: Account }
 >;
 
 @Injectable()
@@ -49,6 +50,6 @@ export class AuthenticateUseCase {
       sub: account.id.toString(),
     });
 
-    return right({ accessToken });
+    return right({ accessToken, user: account });
   }
 }

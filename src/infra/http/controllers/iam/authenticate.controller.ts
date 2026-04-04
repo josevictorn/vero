@@ -12,6 +12,7 @@ import { z } from "zod";
 import { AuthenticateUseCase } from "@/domain/iam/application/use-cases/authenticate";
 import { WrongCredentialsError } from "@/domain/iam/application/use-cases/errors/wrong-credentials-error";
 import { Public } from "@/infra/auth/public";
+import { AccountPresenter } from "../../presenters/account-presenter";
 
 const authenticateBodySchema = z.object({
   email: z.email(),
@@ -52,6 +53,15 @@ export class AuthenticateController {
       type: "object",
       properties: {
         access_token: { type: "string", description: "JWT token" },
+        user: {
+          type: "object",
+          properties: {
+            id: { type: "string", format: "uuid" },
+            name: { type: "string" },
+            email: { type: "string", format: "email" },
+            role: { type: "string" },
+          },
+        },
       },
     },
   })
@@ -101,8 +111,8 @@ export class AuthenticateController {
       }
     }
 
-    const { accessToken } = result.value;
+    const { accessToken, user } = result.value;
 
-    return { access_token: accessToken };
+    return { access_token: accessToken, user: AccountPresenter.toHTTP(user) };
   }
 }
