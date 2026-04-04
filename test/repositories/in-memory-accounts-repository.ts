@@ -1,3 +1,4 @@
+import type { PaginationParams } from "@/core/repositories/pagination-params";
 import type { AccountsRepository } from "@/domain/iam/application/repositories/accounts-repository";
 import type { Account } from "@/domain/iam/enterprise/entities/account";
 import type { Admin } from "@/domain/iam/enterprise/entities/admin.ts";
@@ -24,6 +25,15 @@ export class InMemoryAccountsRepository implements AccountsRepository {
     }
 
     return Promise.resolve(account);
+  }
+
+  findMany(params: PaginationParams) {
+    const accounts = this.items.slice((params.page - 1) * 20, params.page * 20);
+
+    return Promise.resolve({
+      items: accounts,
+      total: this.items.length,
+    });
   }
 
   create(admin: Admin) {
