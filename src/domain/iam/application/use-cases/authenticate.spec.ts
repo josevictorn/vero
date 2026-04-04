@@ -40,6 +40,12 @@ describe("Authenticate Account Use Case", () => {
     expect(result.isRight()).toBe(true);
     expect(result.value).toEqual({
       accessToken: expect.any(String),
+      user: expect.objectContaining({
+        id: admin.id,
+        email: admin.email,
+        name: admin.name,
+        role: admin.role,
+      }),
     });
   });
 
