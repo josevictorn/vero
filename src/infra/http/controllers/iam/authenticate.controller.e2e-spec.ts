@@ -24,7 +24,7 @@ describe("Authenticate Controller (e2e)", () => {
   });
 
   test("[POST] /accounts/authenticate", async () => {
-    await accountFactory.makePrismaAccount({
+    const account = await accountFactory.makePrismaAccount({
       email: "admin@example.com",
       password: await hash("password123"),
     });
@@ -39,6 +39,12 @@ describe("Authenticate Controller (e2e)", () => {
     expect(response.status).toBe(200);
     expect(response.body).toEqual({
       access_token: expect.any(String),
+      user: expect.objectContaining({
+        id: expect.any(String),
+        email: account.email,
+        name: account.name,
+        role: account.role,
+      }),
     });
   });
 });
