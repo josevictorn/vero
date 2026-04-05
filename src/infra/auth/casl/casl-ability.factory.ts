@@ -2,11 +2,11 @@ import {
   AbilityBuilder,
   createMongoAbility,
   type MongoAbility,
+  type Subject,
 } from "@casl/ability";
 import { Injectable } from "@nestjs/common";
 import { UserRole } from "@/domain/iam/enterprise/entities/value-objects/user-role.ts";
 import { Action } from "./actions.ts";
-import type { Subject } from "./subjects.ts";
 
 export type AppAbility = MongoAbility<[Action, Subject]>;
 
@@ -19,6 +19,8 @@ export interface CurrentUser {
 export class CaslAbilityFactory {
   defineAbilityFor(user: CurrentUser): AppAbility {
     const { can, build } = new AbilityBuilder<AppAbility>(createMongoAbility);
+
+    can(Action.Read, "Account", { id: { $eq: user.sub } });
 
     // biome-ignore lint/style/useDefaultSwitchClause: all cases are explicitly handled
     switch (user.role) {
