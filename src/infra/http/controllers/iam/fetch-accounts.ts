@@ -45,29 +45,24 @@ export class FetchAccountsController {
     schema: {
       type: "object",
       properties: {
-        data: {
+        accounts: {
+          type: "array",
+          items: {
+            type: "object",
+            properties: {
+              id: { type: "string", format: "uuid" },
+              name: { type: "string" },
+              email: { type: "string", format: "email" },
+              role: { type: "string" },
+            },
+          },
+        },
+        meta: {
           type: "object",
           properties: {
-            accounts: {
-              type: "array",
-              items: {
-                type: "object",
-                properties: {
-                  id: { type: "string", format: "uuid" },
-                  name: { type: "string" },
-                  email: { type: "string", format: "email" },
-                  role: { type: "string" },
-                },
-              },
-            },
-            meta: {
-              type: "object",
-              properties: {
-                currentPage: { type: "number" },
-                totalCount: { type: "number" },
-                perPage: { type: "number" },
-              },
-            },
+            currentPage: { type: "number" },
+            totalCount: { type: "number" },
+            perPage: { type: "number" },
           },
         },
       },
