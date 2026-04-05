@@ -3,15 +3,12 @@ import { JwtService } from "@nestjs/jwt";
 import { Test } from "@nestjs/testing";
 import request from "supertest";
 import { AccountFactory } from "test/factories/make-account";
-import { UserRole } from "@/domain/iam/enterprise/entities/value-objects/user-role";
-import { AppModule } from "@/infra/app.module.ts";
+import { AppModule } from "@/infra/app.module";
 import { DatabaseModule } from "@/infra/database/database.module";
-import { PrismaService } from "@/infra/database/prisma/prisma.service.ts";
 
-describe("Register Admin Controller (e2e)", () => {
+describe("Get User Profile Controller (e2e)", () => {
   let app: INestApplication;
   let accountFactory: AccountFactory;
-  let prisma: PrismaService;
   let jwt: JwtService;
 
   beforeAll(async () => {
@@ -23,38 +20,34 @@ describe("Register Admin Controller (e2e)", () => {
     app = moduleRef.createNestApplication();
 
     accountFactory = moduleRef.get(AccountFactory);
-    prisma = moduleRef.get(PrismaService);
     jwt = moduleRef.get(JwtService);
 
     await app.init();
   });
 
-  test("[POST] /accounts/admin", async () => {
-    const adminAccount = await accountFactory.makePrismaAccount({
-      role: UserRole.ADMIN,
+  test("[GET] /accounts/profile", async () => {
+    const account = await accountFactory.makePrismaAccount({
+      email: "johndoe@example.com",
+      name: "John Doe",
     });
 
     const accessToken = jwt.sign({
-      sub: adminAccount.id.toString(),
+      sub: account.id.toString(),
     });
 
     const response = await request(app.getHttpServer())
-      .post("/accounts/admin")
+      .get("/accounts/profile")
       .set("Authorization", `Bearer ${accessToken}`)
-      .send({
-        name: "John Doe",
-        email: "john.doe@example.com",
-        password: "password123",
-      });
+      .send();
 
-    expect(response.status).toBe(201);
-
-    const userOnDatabase = await prisma.user.findUnique({
-      where: {
-        email: "john.doe@example.com",
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual({
+      user: {
+        id: account.id.toString(),
+        email: account.email,
+        name: account.name,
+        role: account.role,
       },
     });
-
-    expect(userOnDatabase).toBeTruthy();
   });
 });
