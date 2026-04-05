@@ -23,6 +23,6 @@ import { PrismaScreeningFlowRepository } from "./prisma/repositories/prisma-scre
       useClass: PrismaScreeningFlowRepository,
     },
   ],
-  exports: [PrismaService, AdminsRepository, AccountsRepository],
+  exports: [PrismaService, AdminsRepository, AccountsRepository, ScreeningFlowRepository],
 })
 export class DatabaseModule {}

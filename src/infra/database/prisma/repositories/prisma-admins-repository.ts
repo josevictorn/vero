@@ -1,5 +1,5 @@
 import { Inject, Injectable } from "@nestjs/common";
-import { UserRole } from "@prisma/client";
+import { UserRole } from "generated/prisma/client";
 import type { AdminsRepository } from "@/domain/iam/application/repositories/admins-repository.ts";
 import type { Admin } from "@/domain/iam/enterprise/entities/admin.ts";
 import { PrismaAdminMapper } from "@/infra/database/prisma/mappers/prisma-admin-mapper.ts";

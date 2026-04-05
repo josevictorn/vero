@@ -1,3 +1,4 @@
+import { Injectable, Inject } from "@nestjs/common";
 import { Either, left, right } from "@/core/either";
 import { ScreeningFlowRepository } from "../repositories/screening-flow-repository";
 
@@ -7,8 +8,12 @@ interface DeleteScreeningFlowUseCaseRequest {
 
 type DeleteScreeningFlowUseCaseResponse = Either<Error, null>;
 
+@Injectable()
 export class DeleteScreeningFlowUseCase {
-  constructor(private screeningFlowRepository: ScreeningFlowRepository) {}
+  constructor(
+    @Inject(ScreeningFlowRepository)
+    private screeningFlowRepository: ScreeningFlowRepository
+  ) {}
 
   async execute(
     request: DeleteScreeningFlowUseCaseRequest
