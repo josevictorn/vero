@@ -1,0 +1,53 @@
+import type { INestApplication } from "@nestjs/common";
+import { JwtService } from "@nestjs/jwt";
+import { Test } from "@nestjs/testing";
+import request from "supertest";
+import { AccountFactory } from "test/factories/make-account";
+import { AppModule } from "@/infra/app.module";
+import { DatabaseModule } from "@/infra/database/database.module";
+
+describe("Get User Profile Controller (e2e)", () => {
+  let app: INestApplication;
+  let accountFactory: AccountFactory;
+  let jwt: JwtService;
+
+  beforeAll(async () => {
+    const moduleRef = await Test.createTestingModule({
+      imports: [AppModule, DatabaseModule],
+      providers: [AccountFactory],
+    }).compile();
+
+    app = moduleRef.createNestApplication();
+
+    accountFactory = moduleRef.get(AccountFactory);
+    jwt = moduleRef.get(JwtService);
+
+    await app.init();
+  });
+
+  test("[GET] /accounts/profile", async () => {
+    const account = await accountFactory.makePrismaAccount({
+      email: "johndoe@example.com",
+      name: "John Doe",
+    });
+
+    const accessToken = jwt.sign({
+      sub: account.id.toString(),
+    });
+
+    const response = await request(app.getHttpServer())
+      .get("/accounts/profile")
+      .set("Authorization", `Bearer ${accessToken}`)
+      .send();
+
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual({
+      user: {
+        id: account.id.toString(),
+        email: account.email,
+        name: account.name,
+        role: account.role,
+      },
+    });
+  });
+});
