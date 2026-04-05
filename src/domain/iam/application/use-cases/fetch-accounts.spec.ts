@@ -52,4 +52,37 @@ describe("Fetch Accounts Use Case", () => {
     expect(result.isLeft()).toBe(true);
     expect(result.value).toBeInstanceOf(InvalidPageError);
   });
+
+  it("should return an empty list if there are no accounts", async () => {
+    const result = await sut.execute({ page: 1 });
+
+    expect(result.isRight()).toBe(true);
+    expect(result.value).toEqual({
+      accounts: [],
+      meta: {
+        currentPage: 1,
+        totalCount: 0,
+        perPage: 20,
+      },
+    });
+  });
+
+  it("should return an empty list if the page is out of range", async () => {
+    const account1 = makeAccount();
+    const account2 = makeAccount();
+
+    inMemoryAccountsRepository.items.push(account1, account2);
+
+    const result = await sut.execute({ page: 2 });
+
+    expect(result.isRight()).toBe(true);
+    expect(result.value).toEqual({
+      accounts: [],
+      meta: {
+        currentPage: 2,
+        totalCount: 2,
+        perPage: 20,
+      },
+    });
+  });
 });
