@@ -6,6 +6,8 @@ import { PrismaAdminsRepository } from "@/infra/database/prisma/repositories/pri
 import { PrismaAccountsRepository } from "./prisma/repositories/prisma-accounts-repository";
 import { ScreeningFlowRepository } from "@/domain/crm/application/repositories/screening-flow-repository";
 import { PrismaScreeningFlowRepository } from "./prisma/repositories/prisma-screening-flow-repository";
+import { WorkspacesRepository } from "@/domain/crm/application/repositories/workspaces-repository";
+import { PrismaWorkspacesRepository } from "./prisma/repositories/prisma-workspaces-repository";
 
 @Module({
   providers: [
@@ -22,7 +24,17 @@ import { PrismaScreeningFlowRepository } from "./prisma/repositories/prisma-scre
       provide: ScreeningFlowRepository,
       useClass: PrismaScreeningFlowRepository,
     },
+    {
+      provide: WorkspacesRepository,
+      useClass: PrismaWorkspacesRepository,
+    },
   ],
-  exports: [PrismaService, AdminsRepository, AccountsRepository, ScreeningFlowRepository],
+  exports: [
+    PrismaService,
+    AdminsRepository,
+    AccountsRepository,
+    ScreeningFlowRepository,
+    WorkspacesRepository,
+  ],
 })
 export class DatabaseModule {}

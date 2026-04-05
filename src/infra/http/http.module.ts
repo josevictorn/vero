@@ -27,6 +27,11 @@ import { FetchScreeningFlowsController } from "./controllers/crm/fetch-screening
 import { EditScreeningFlowController } from "./controllers/crm/edit-screening-flow.controller";
 import { DeleteScreeningFlowController } from "./controllers/crm/delete-screening-flow.controller";
 
+import { GetWorkspaceUseCase } from "@/domain/crm/application/use-cases/get-workspace";
+import { EditWorkspaceUseCase } from "@/domain/crm/application/use-cases/edit-workspace";
+import { GetWorkspaceController } from "./controllers/crm/get-workspace.controller";
+import { EditWorkspaceController } from "./controllers/crm/edit-workspace.controller";
+
 @Module({
   imports: [DatabaseModule, CryptographyModule, CaslModule],
   controllers: [
@@ -40,6 +45,8 @@ import { DeleteScreeningFlowController } from "./controllers/crm/delete-screenin
     FetchScreeningFlowsController,
     EditScreeningFlowController,
     DeleteScreeningFlowController,
+    GetWorkspaceController,
+    EditWorkspaceController,
   ],
   providers: [
     RegisterAdminUseCase,
@@ -52,6 +59,8 @@ import { DeleteScreeningFlowController } from "./controllers/crm/delete-screenin
     FetchScreeningFlowsUseCase,
     EditScreeningFlowUseCase,
     DeleteScreeningFlowUseCase,
+    GetWorkspaceUseCase,
+    EditWorkspaceUseCase,
   ],
 })
 export class HttpModule {}
