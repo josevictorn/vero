@@ -44,6 +44,7 @@ describe("Authenticate Controller (e2e)", () => {
         email: account.email,
         name: account.name,
         role: account.role,
+        isActive: account.isActive,
       }),
     });
   });

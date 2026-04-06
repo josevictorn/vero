@@ -44,6 +44,7 @@ export class RegisterAdminUseCase {
       name,
       role: UserRole.ADMIN,
       password: hashedPassword,
+      isActive: true,
     });
 
     await this.adminsRepository.create(admin);

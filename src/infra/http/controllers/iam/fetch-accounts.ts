@@ -11,6 +11,7 @@ import { ApiResponse, ApiTags } from "@nestjs/swagger";
 import { z } from "zod";
 import { InvalidPageError } from "@/core/errors/errors/invalid-page-error";
 import { FetchAccountsUseCase } from "@/domain/iam/application/use-cases/fetch-accounts";
+import { UserRole } from "@/domain/iam/enterprise/entities/value-objects/user-role";
 import { Action } from "@/infra/auth/casl/actions";
 import { CheckPolicies } from "@/infra/auth/casl/check-policies.decorator";
 import { PoliciesGuard } from "@/infra/auth/casl/policies.guard";
@@ -53,7 +54,18 @@ export class FetchAccountsController {
               id: { type: "string", format: "uuid" },
               name: { type: "string" },
               email: { type: "string", format: "email" },
-              role: { type: "string" },
+              role: {
+                type: "string",
+                enum: [
+                  UserRole.ADMIN,
+                  UserRole.CLIENT,
+                  UserRole.ASSISTANT,
+                  UserRole.FINANCE,
+                  UserRole.LAWYER,
+                ],
+              },
+              isActive: { type: "boolean" },
+              createdAt: { type: "string", format: "date-time" },
             },
           },
         },
@@ -99,7 +111,7 @@ export class FetchAccountsController {
     const { accounts, meta } = result.value;
 
     return {
-      accounts: accounts.map(AccountPresenter.toHTTP),
+      results: accounts.map(AccountPresenter.toHTTP),
       meta,
     };
   }

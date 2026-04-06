@@ -11,6 +11,8 @@ export class PrismaAccountMapper {
         email: raw.email,
         role: raw.role as UserRole,
         password: raw.password,
+        isActive: raw.isActive,
+        createdAt: raw.createdAt.toISOString(),
       },
       new UniqueEntityID(raw.id)
     );
@@ -23,6 +25,8 @@ export class PrismaAccountMapper {
       role: account.role,
       email: account.email,
       password: account.password,
+      isActive: account.isActive,
+      createdAt: new Date(account.createdAt),
     };
   }
 }
