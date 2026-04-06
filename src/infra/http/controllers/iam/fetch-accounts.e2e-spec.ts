@@ -55,25 +55,28 @@ describe("Fetch Accounts Controller (e2e)", () => {
 
     expect(response.status).toBe(200);
     expect(response.body).toEqual({
-      accounts: expect.arrayContaining([
-        {
+      results: expect.arrayContaining([
+        expect.objectContaining({
           id: account1.id.toString(),
           email: account1.email,
           name: account1.name,
           role: account1.role,
-        },
-        {
+          isActive: account1.isActive,
+        }),
+        expect.objectContaining({
           id: account2.id.toString(),
           email: account2.email,
           name: account2.name,
           role: account2.role,
-        },
-        {
+          isActive: account2.isActive,
+        }),
+        expect.objectContaining({
           id: account3.id.toString(),
           email: account3.email,
           name: account3.name,
           role: account3.role,
-        },
+          isActive: account3.isActive,
+        }),
       ]),
       meta: expect.objectContaining({
         currentPage: 1,
