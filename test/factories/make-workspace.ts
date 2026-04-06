@@ -1,6 +1,6 @@
 import { faker } from "@faker-js/faker/locale/pt_BR";
 import { Inject, Injectable } from "@nestjs/common";
-import type { UniqueEntityID } from "@/core/entity/unique-entity-id";
+import { UniqueEntityID } from "@/core/entity/unique-entity-id";
 import { PrismaService } from "@/infra/database/prisma/prisma.service";
 import {
   Workspace,
@@ -34,8 +34,10 @@ export class WorkspaceFactory {
     private readonly prisma: PrismaService
   ) {}
 
-  async makePrismaWorkspace(data: Partial<WorkspaceProps> = {}) {
-    const workspace = makeWorkspace(data);
+  async makePrismaWorkspace(data: Partial<WorkspaceProps & { id: string }> = {}) {
+    const { id, ...override } = data as any;
+    
+    const workspace = makeWorkspace(override, id ? new UniqueEntityID(id) : undefined);
 
     await this.prisma.workspace.create({
       data: PrismaWorkspaceMapper.toPrisma(workspace),

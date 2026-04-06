@@ -32,6 +32,18 @@ import { EditWorkspaceUseCase } from "@/domain/crm/application/use-cases/edit-wo
 import { GetWorkspaceController } from "./controllers/crm/get-workspace.controller";
 import { EditWorkspaceController } from "./controllers/crm/edit-workspace.controller";
 
+import { CreateLawyerController } from "./controllers/crm/create-lawyer.controller";
+import { GetLawyerController } from "./controllers/crm/get-lawyer.controller";
+import { FetchLawyersController } from "./controllers/crm/fetch-lawyers.controller";
+import { EditLawyerController } from "./controllers/crm/edit-lawyer.controller";
+import { DeleteLawyerController } from "./controllers/crm/delete-lawyer.controller";
+
+import { CreateLawyerUseCase } from "@/domain/crm/application/use-cases/create-lawyer";
+import { GetLawyerUseCase } from "@/domain/crm/application/use-cases/get-lawyer";
+import { FetchLawyersUseCase } from "@/domain/crm/application/use-cases/fetch-lawyers";
+import { EditLawyerUseCase } from "@/domain/crm/application/use-cases/edit-lawyer";
+import { DeleteLawyerUseCase } from "@/domain/crm/application/use-cases/delete-lawyer";
+
 @Module({
   imports: [DatabaseModule, CryptographyModule, CaslModule],
   controllers: [
@@ -47,6 +59,11 @@ import { EditWorkspaceController } from "./controllers/crm/edit-workspace.contro
     DeleteScreeningFlowController,
     GetWorkspaceController,
     EditWorkspaceController,
+    CreateLawyerController,
+    GetLawyerController,
+    FetchLawyersController,
+    EditLawyerController,
+    DeleteLawyerController,
   ],
   providers: [
     RegisterAdminUseCase,
@@ -61,6 +78,11 @@ import { EditWorkspaceController } from "./controllers/crm/edit-workspace.contro
     DeleteScreeningFlowUseCase,
     GetWorkspaceUseCase,
     EditWorkspaceUseCase,
+    CreateLawyerUseCase,
+    GetLawyerUseCase,
+    FetchLawyersUseCase,
+    EditLawyerUseCase,
+    DeleteLawyerUseCase,
   ],
 })
 export class HttpModule {}

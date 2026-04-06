@@ -8,6 +8,8 @@ import { ScreeningFlowRepository } from "@/domain/crm/application/repositories/s
 import { PrismaScreeningFlowRepository } from "./prisma/repositories/prisma-screening-flow-repository";
 import { WorkspacesRepository } from "@/domain/crm/application/repositories/workspaces-repository";
 import { PrismaWorkspacesRepository } from "./prisma/repositories/prisma-workspaces-repository";
+import { LawyersRepository } from "@/domain/crm/application/repositories/lawyers-repository";
+import { PrismaLawyersRepository } from "./prisma/repositories/prisma-lawyers-repository";
 
 @Module({
   providers: [
@@ -28,6 +30,10 @@ import { PrismaWorkspacesRepository } from "./prisma/repositories/prisma-workspa
       provide: WorkspacesRepository,
       useClass: PrismaWorkspacesRepository,
     },
+    {
+      provide: LawyersRepository,
+      useClass: PrismaLawyersRepository,
+    },
   ],
   exports: [
     PrismaService,
@@ -35,6 +41,7 @@ import { PrismaWorkspacesRepository } from "./prisma/repositories/prisma-workspa
     AccountsRepository,
     ScreeningFlowRepository,
     WorkspacesRepository,
+    LawyersRepository,
   ],
 })
 export class DatabaseModule {}
