@@ -51,6 +51,8 @@ export class GetUserProfileController {
                 UserRole.LAWYER,
               ],
             },
+            isActive: { type: "boolean" },
+            createdAt: { type: "string", format: "date-time" },
           },
         },
       },

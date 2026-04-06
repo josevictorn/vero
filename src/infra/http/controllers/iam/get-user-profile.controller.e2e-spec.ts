@@ -42,12 +42,13 @@ describe("Get User Profile Controller (e2e)", () => {
 
     expect(response.status).toBe(200);
     expect(response.body).toEqual({
-      user: {
+      user: expect.objectContaining({
         id: account.id.toString(),
         email: account.email,
         name: account.name,
         role: account.role,
-      },
+        isActive: account.isActive,
+      }),
     });
   });
 });
