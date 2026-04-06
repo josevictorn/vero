@@ -1,10 +1,7 @@
-import {
-  type Prisma,
-  type User as PrismaAdmin,
-  UserRole,
-} from "generated/prisma/client";
+import type { Prisma, User as PrismaAdmin } from "generated/prisma/client";
 import { UniqueEntityID } from "@/core/entity/unique-entity-id.ts";
 import { Admin } from "@/domain/iam/enterprise/entities/admin.ts";
+import { UserRole } from "@/domain/iam/enterprise/entities/value-objects/user-role";
 
 export class PrismaAdminMapper {
   static toDomain(raw: PrismaAdmin): Admin {
@@ -13,7 +10,9 @@ export class PrismaAdminMapper {
         name: raw.name,
         email: raw.email,
         password: raw.password,
-        role: raw.role,
+        role: raw.role as UserRole,
+        isActive: raw.isActive,
+        createdAt: raw.createdAt.toISOString(),
       },
       new UniqueEntityID(raw.id)
     );
@@ -26,6 +25,8 @@ export class PrismaAdminMapper {
       role: UserRole.ADMIN,
       email: admin.email,
       password: admin.password,
+      isActive: admin.isActive,
+      createdAt: new Date(admin.createdAt),
     };
   }
 }

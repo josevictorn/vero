@@ -1,9 +1,12 @@
 import { Entity } from "@/core/entity/entity.ts";
 import type { UniqueEntityID } from "@/core/entity/unique-entity-id.ts";
+import type { Optional } from "@/core/types/opcional";
 import type { UserRole } from "./value-objects/user-role";
 
 export interface AccountProps {
+  createdAt: string;
   email: string;
+  isActive: boolean;
   name: string;
   password: string;
   role: UserRole;
@@ -30,8 +33,22 @@ export class Account extends Entity<AccountProps> {
     this.props.password = password;
   }
 
-  static create(props: AccountProps, id?: UniqueEntityID) {
-    const account = new Account(props, id);
+  get isActive() {
+    return this.props.isActive;
+  }
+
+  get createdAt() {
+    return this.props.createdAt;
+  }
+
+  static create(
+    props: Optional<AccountProps, "createdAt">,
+    id?: UniqueEntityID
+  ) {
+    const account = new Account(
+      { ...props, createdAt: new Date().toISOString() },
+      id
+    );
 
     return account;
   }

@@ -24,6 +24,8 @@ export function makeAccount(
       email: faker.internet.email(),
       role: randomUserRole(),
       password: faker.internet.password(),
+      createdAt: new Date().toISOString(),
+      isActive: faker.datatype.boolean(),
       ...override,
     },
     id

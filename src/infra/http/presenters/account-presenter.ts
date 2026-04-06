@@ -7,6 +7,8 @@ export class AccountPresenter {
       name: account.name,
       email: account.email,
       role: account.role,
+      isActive: account.isActive,
+      createdAt: account.createdAt,
     };
   }
 }
