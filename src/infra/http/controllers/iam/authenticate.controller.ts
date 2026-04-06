@@ -60,6 +60,8 @@ export class AuthenticateController {
             name: { type: "string" },
             email: { type: "string", format: "email" },
             role: { type: "string" },
+            isActive: { type: "boolean" },
+            createdAt: { type: "string", format: "date-time" },
           },
         },
       },
