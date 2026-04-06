@@ -47,6 +47,7 @@ export class RegisterAccountUseCase {
       name,
       role,
       password: hashedPassword,
+      isActive: true,
     });
 
     await this.accountsRepository.create(account);
