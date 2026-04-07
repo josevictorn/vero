@@ -13,7 +13,7 @@ export class FetchScreeningFlowsController {
     const result = await this.fetchScreeningFlows.execute();
 
     if (result.isLeft()) {
-      throw new InternalServerErrorException("Unexpected error when fetching screening flows.");
+      throw new InternalServerErrorException("Unknown error occurred");
     }
 
     const { screeningFlows } = result.value;

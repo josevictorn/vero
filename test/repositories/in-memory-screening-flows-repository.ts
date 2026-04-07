@@ -1,7 +1,7 @@
-import type { ScreeningFlowRepository } from "@/domain/crm/application/repositories/screening-flow-repository";
+import type { ScreeningFlowsRepository } from "@/domain/crm/application/repositories/screening-flows-repository";
 import type { ScreeningFlow } from "@/domain/crm/enterprise/entities/screening-flow";
 
-export class InMemoryScreeningFlowsRepository implements ScreeningFlowRepository {
+export class InMemoryScreeningFlowsRepository implements ScreeningFlowsRepository {
   public items: ScreeningFlow[] = [];
 
   async findById(id: string): Promise<ScreeningFlow | null> {

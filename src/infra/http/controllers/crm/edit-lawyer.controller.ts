@@ -1,7 +1,9 @@
 import { EditLawyerUseCase } from "@/domain/crm/application/use-cases/edit-lawyer";
+import { LawyerNotFoundError } from "@/domain/crm/application/use-cases/errors/lawyer-not-found-error";
 import { Body, Controller, HttpCode, Param, Put, NotFoundException, InternalServerErrorException } from "@nestjs/common";
 import { ApiBody, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { z } from "zod";
+import { ZodValidationPipe } from "../../pipes/zod-validation-pipe";
 
 const editLawyerBodySchema = z.object({
   cellphone: z.string(),
@@ -26,7 +28,7 @@ export class EditLawyerController {
   })
   @ApiResponse({ status: 200, description: "Lawyer updated successfully" })
   @ApiResponse({ status: 404, description: "Lawyer not found" })
-  async handle(@Param("id") id: string, @Body() body: EditLawyerBodySchema) {
+  async handle(@Param("id") id: string, @Body(new ZodValidationPipe(editLawyerBodySchema)) body: EditLawyerBodySchema) {
     const { cellphone } = body;
 
     const result = await this.editLawyer.execute({
@@ -36,10 +38,13 @@ export class EditLawyerController {
 
     if (result.isLeft()) {
       const error = result.value;
-      if (error.message.includes("not found")) {
-        throw new NotFoundException(error.message);
+      
+      switch (error.constructor) {
+        case LawyerNotFoundError:
+          throw new NotFoundException(error.message);
+        default:
+          throw new InternalServerErrorException(error.message);
       }
-      throw new InternalServerErrorException(error.message);
     }
   }
 }

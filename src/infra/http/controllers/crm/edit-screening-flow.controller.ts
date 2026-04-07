@@ -1,11 +1,13 @@
 import { EditScreeningFlowUseCase } from "@/domain/crm/application/use-cases/edit-screening-flow";
+import { ScreeningFlowNotFoundError } from "@/domain/crm/application/use-cases/errors/screening-flow-not-found-error";
 import { Body, Controller, HttpCode, Param, Put, NotFoundException, InternalServerErrorException } from "@nestjs/common";
 import { ApiBody, ApiResponse, ApiTags, ApiParam } from "@nestjs/swagger";
 import { z } from "zod";
+import { ZodValidationPipe } from "../../pipes/zod-validation-pipe";
 
 const editScreeningFlowBodySchema = z.object({
   caseType: z.string(),
-  questions: z.any(),
+  questions: z.array(z.object({ question: z.string() }).loose()),
 });
 
 type EditScreeningFlowBodySchema = z.infer<typeof editScreeningFlowBodySchema>;
@@ -31,7 +33,7 @@ export class EditScreeningFlowController {
   @ApiResponse({ status: 404, description: "Screening flow not found" })
   async handle(
     @Param("id") id: string,
-    @Body() body: EditScreeningFlowBodySchema
+    @Body(new ZodValidationPipe(editScreeningFlowBodySchema)) body: EditScreeningFlowBodySchema
   ) {
     const { caseType, questions } = body;
 
@@ -43,10 +45,13 @@ export class EditScreeningFlowController {
 
     if (result.isLeft()) {
       const error = result.value;
-      if (error.message.includes("not found")) {
-        throw new NotFoundException(error.message);
+      
+      switch (error.constructor) {
+        case ScreeningFlowNotFoundError:
+          throw new NotFoundException(error.message);
+        default:
+          throw new InternalServerErrorException(error.message);
       }
-      throw new InternalServerErrorException(error.message);
     }
 
     const { screeningFlow } = result.value;

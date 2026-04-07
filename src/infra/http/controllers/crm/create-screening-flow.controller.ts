@@ -1,11 +1,12 @@
 import { CreateScreeningFlowUseCase } from "@/domain/crm/application/use-cases/create-screening-flow";
-import { Body, Controller, HttpCode, InternalServerErrorException, Post } from "@nestjs/common";
+import { Body, Controller, HttpCode, InternalServerErrorException, Post, UsePipes } from "@nestjs/common";
 import { ApiBody, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { z } from "zod";
+import { ZodValidationPipe } from "../../pipes/zod-validation-pipe";
 
 const createScreeningFlowBodySchema = z.object({
   caseType: z.string(),
-  questions: z.any(),
+  questions: z.array(z.object({ question: z.string() }).loose()),
 });
 
 type CreateScreeningFlowBodySchema = z.infer<typeof createScreeningFlowBodySchema>;
@@ -38,7 +39,7 @@ export class CreateScreeningFlowController {
     status: 400,
     description: "Validation failed or other bad request error",
   })
-  async handle(@Body() body: CreateScreeningFlowBodySchema) {
+  async handle(@Body(new ZodValidationPipe(createScreeningFlowBodySchema)) body: CreateScreeningFlowBodySchema) {
     const { caseType, questions } = body;
 
     const result = await this.createScreeningFlow.execute({

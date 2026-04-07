@@ -3,6 +3,8 @@ import { Either, left, right } from "@/core/either";
 import { Lawyer } from "../../enterprise/entities/lawyer";
 import { LawyersRepository } from "../repositories/lawyers-repository";
 import { WorkspacesRepository } from "../repositories/workspaces-repository";
+import { WorkspaceDoesntExistError } from "./errors/workspace-doesnt-exist-error";
+import { LawyerAlreadyExistsError } from "./errors/lawyer-already-exists-error";
 
 interface CreateLawyerUseCaseRequest {
   userId: string;
@@ -27,12 +29,12 @@ export class CreateLawyerUseCase {
     const defaultWorkspace = await this.workspacesRepository.findFirst();
 
     if (!defaultWorkspace) {
-      return left(new Error("Default Workspace is not seeded."));
+      return left(new WorkspaceDoesntExistError());
     }
 
     const lawyerAlreadyExists = await this.lawyersRepository.findByUserId(userId);
     if (lawyerAlreadyExists) {
-      return left(new Error("This User is already registered as a Lawyer."));
+      return left(new LawyerAlreadyExistsError());
     }
 
     const lawyer = Lawyer.create({

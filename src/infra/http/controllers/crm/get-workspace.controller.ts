@@ -1,3 +1,4 @@
+import { WorkspaceDoesntExistError } from "@/domain/crm/application/use-cases/errors/workspace-doesnt-exist-error";
 import { GetWorkspaceUseCase } from "@/domain/crm/application/use-cases/get-workspace";
 import { Controller, Get, NotFoundException, InternalServerErrorException } from "@nestjs/common";
 import { ApiResponse, ApiTags } from "@nestjs/swagger";
@@ -15,10 +16,13 @@ export class GetWorkspaceController {
 
     if (result.isLeft()) {
       const error = result.value;
-      if (error.message.includes("not found")) {
-        throw new NotFoundException(error.message);
+      
+      switch (error.constructor) {
+        case WorkspaceDoesntExistError:
+          throw new NotFoundException(error.message);
+        default:
+          throw new InternalServerErrorException(error.message);
       }
-      throw new InternalServerErrorException(error.message);
     }
 
     const { workspace } = result.value;

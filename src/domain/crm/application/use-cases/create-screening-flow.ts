@@ -1,11 +1,11 @@
 import { Injectable, Inject } from "@nestjs/common";
 import { Either, right } from "@/core/either";
-import { ScreeningFlow } from "../../enterprise/entities/screening-flow";
-import { ScreeningFlowRepository } from "../repositories/screening-flow-repository";
+import { ScreeningFlow, type Question } from "../../enterprise/entities/screening-flow";
+import { ScreeningFlowsRepository } from "../repositories/screening-flows-repository";
 
 interface CreateScreeningFlowUseCaseRequest {
     caseType: string;
-    questions: any;
+    questions: Question[];
 }
 
 type CreateScreeningFlowUseCaseResponse = Either<null, { screeningFlow: ScreeningFlow }>;
@@ -13,8 +13,8 @@ type CreateScreeningFlowUseCaseResponse = Either<null, { screeningFlow: Screenin
 @Injectable()
 export class CreateScreeningFlowUseCase {
     constructor(
-      @Inject(ScreeningFlowRepository)
-      private screeningFlowRepository: ScreeningFlowRepository
+      @Inject(ScreeningFlowsRepository)
+      private screeningFlowsRepository: ScreeningFlowsRepository
     ) {}
 
     async execute(request: CreateScreeningFlowUseCaseRequest): Promise<CreateScreeningFlowUseCaseResponse> {
@@ -25,7 +25,7 @@ export class CreateScreeningFlowUseCase {
             questions,
         });
 
-        await this.screeningFlowRepository.create(screeningFlow);
+        await this.screeningFlowsRepository.create(screeningFlow);
 
         return right({ screeningFlow });
     }

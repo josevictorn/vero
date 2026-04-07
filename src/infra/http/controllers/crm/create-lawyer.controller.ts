@@ -1,4 +1,6 @@
 import { CreateLawyerUseCase } from "@/domain/crm/application/use-cases/create-lawyer";
+import { LawyerAlreadyExistsError } from "@/domain/crm/application/use-cases/errors/lawyer-already-exists-error";
+import { WorkspaceDoesntExistError } from "@/domain/crm/application/use-cases/errors/workspace-doesnt-exist-error";
 import {
   Body,
   Controller,
@@ -10,9 +12,10 @@ import {
 } from "@nestjs/common";
 import { ApiBody, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { z } from "zod";
+import { ZodValidationPipe } from "../../pipes/zod-validation-pipe";
 
 const createLawyerBodySchema = z.object({
-  userId: z.string().uuid(),
+  userId: z.uuid(),
   cellphone: z.string(),
 });
 
@@ -38,7 +41,7 @@ export class CreateLawyerController {
   @ApiResponse({ status: 201, description: "Lawyer profile created successfully" })
   @ApiResponse({ status: 409, description: "User is already a lawyer" })
   @ApiResponse({ status: 404, description: "Default workspace not synced" })
-  async handle(@Body() body: CreateLawyerBodySchema) {
+  async handle(@Body(new ZodValidationPipe(createLawyerBodySchema)) body: CreateLawyerBodySchema) {
     const { userId, cellphone } = body;
 
     const result = await this.createLawyer.execute({
@@ -48,13 +51,15 @@ export class CreateLawyerController {
 
     if (result.isLeft()) {
       const error = result.value;
-      if (error.message.includes("already registered")) {
-        throw new ConflictException(error.message);
+
+      switch (error.constructor) {
+        case LawyerAlreadyExistsError:
+          throw new ConflictException(error.message);
+        case WorkspaceDoesntExistError:
+          throw new NotFoundException(error.message);
+        default:
+          throw new InternalServerErrorException(error.message);
       }
-      if (error.message.includes("not seeded")) {
-        throw new NotFoundException(error.message);
-      }
-      throw new InternalServerErrorException(error.message);
     }
   }
 }

@@ -2,6 +2,7 @@ import { Injectable, Inject } from "@nestjs/common";
 import { Either, left, right } from "@/core/either";
 import { Lawyer } from "../../enterprise/entities/lawyer";
 import { LawyersRepository } from "../repositories/lawyers-repository";
+import { LawyerNotFoundError } from "./errors/lawyer-not-found-error";
 
 interface GetLawyerUseCaseRequest {
   id: string;
@@ -20,7 +21,7 @@ export class GetLawyerUseCase {
     const lawyer = await this.lawyersRepository.findById(id);
 
     if (!lawyer) {
-      return left(new Error("Lawyer not found."));
+      return left(new LawyerNotFoundError());
     }
 
     return right({ lawyer });

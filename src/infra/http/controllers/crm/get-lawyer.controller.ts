@@ -1,3 +1,4 @@
+import { LawyerNotFoundError } from "@/domain/crm/application/use-cases/errors/lawyer-not-found-error";
 import { GetLawyerUseCase } from "@/domain/crm/application/use-cases/get-lawyer";
 import { Controller, Get, Param, NotFoundException, InternalServerErrorException } from "@nestjs/common";
 import { ApiResponse, ApiTags } from "@nestjs/swagger";
@@ -15,10 +16,13 @@ export class GetLawyerController {
 
     if (result.isLeft()) {
       const error = result.value;
-      if (error.message.includes("not found")) {
-        throw new NotFoundException(error.message);
+      
+      switch (error.constructor) {
+        case LawyerNotFoundError:
+          throw new NotFoundException(error.message);
+        default:
+          throw new InternalServerErrorException(error.message);
       }
-      throw new InternalServerErrorException(error.message);
     }
 
     const { lawyer } = result.value;

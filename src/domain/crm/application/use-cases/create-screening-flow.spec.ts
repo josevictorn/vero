@@ -13,7 +13,7 @@ describe("Create Screening Flow", () => {
   it("should be able to create a new screening flow", async () => {
     const result = await sut.execute({
       caseType: "Trabalhista",
-      questions: [{ text: "Horas extras?", type: "boolean" }],
+      questions: [{ question: "Fazia horas extras?" }],
     });
 
     expect(result.isRight()).toBe(true);

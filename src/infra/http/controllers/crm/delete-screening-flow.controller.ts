@@ -1,4 +1,5 @@
 import { DeleteScreeningFlowUseCase } from "@/domain/crm/application/use-cases/delete-screening-flow";
+import { ScreeningFlowNotFoundError } from "@/domain/crm/application/use-cases/errors/screening-flow-not-found-error";
 import { Controller, HttpCode, Param, Delete, NotFoundException, InternalServerErrorException } from "@nestjs/common";
 import { ApiResponse, ApiTags, ApiParam } from "@nestjs/swagger";
 
@@ -17,10 +18,13 @@ export class DeleteScreeningFlowController {
 
     if (result.isLeft()) {
       const error = result.value;
-      if (error.message.includes("not found")) {
-        throw new NotFoundException(error.message);
+      
+      switch (error.constructor) {
+        case ScreeningFlowNotFoundError:
+          throw new NotFoundException(error.message);
+        default:
+          throw new InternalServerErrorException(error.message);
       }
-      throw new InternalServerErrorException(error.message);
     }
   }
 }

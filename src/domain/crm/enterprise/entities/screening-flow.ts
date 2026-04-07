@@ -1,9 +1,15 @@
-import { Entity } from "@/core/entity/entity.ts";
-import { UniqueEntityID } from "@/core/entity/unique-entity-id.ts";
+import { Entity } from "@/core/entity/entity";
+import type { UniqueEntityID } from "@/core/entity/unique-entity-id";
+import type { Optional } from "@/core/types/optional";
+
+export interface Question {
+  question: string;
+  [key: string]: unknown;
+}
 
 export interface ScreeningFlowProps {
   caseType: string;
-  questions: any;
+  questions: Question[];
   createdAt: Date;
 }
 
@@ -39,10 +45,8 @@ export class ScreeningFlow extends Entity<ScreeningFlowProps> {
     this.props.caseType = caseType;
   }
 
-  set questions(questions: any) {
+  set questions(questions: Question[]) {
     this.props.questions = questions;
   }
 }
 
-// Helper para tornar o createdAt opcional só na criação
-type Optional<T, K extends keyof T> = Pick<Partial<T>, K> & Omit<T, K>;

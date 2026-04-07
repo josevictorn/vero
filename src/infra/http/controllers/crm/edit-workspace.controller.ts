@@ -1,7 +1,9 @@
 import { EditWorkspaceUseCase } from "@/domain/crm/application/use-cases/edit-workspace";
+import { WorkspaceDoesntExistError } from "@/domain/crm/application/use-cases/errors/workspace-doesnt-exist-error";
 import { Body, Controller, HttpCode, Put, NotFoundException, InternalServerErrorException } from "@nestjs/common";
 import { ApiBody, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { z } from "zod";
+import { ZodValidationPipe } from "../../pipes/zod-validation-pipe";
 
 const editWorkspaceBodySchema = z.object({
   name: z.string(),
@@ -32,7 +34,7 @@ export class EditWorkspaceController {
   })
   @ApiResponse({ status: 200, description: "Workspace updated successfully" })
   @ApiResponse({ status: 404, description: "Workspace not found" })
-  async handle(@Body() body: EditWorkspaceBodySchema) {
+  async handle(@Body(new ZodValidationPipe(editWorkspaceBodySchema)) body: EditWorkspaceBodySchema) {
     const { name, cnpj, email, cellphone } = body;
 
     const result = await this.editWorkspace.execute({
@@ -44,10 +46,13 @@ export class EditWorkspaceController {
 
     if (result.isLeft()) {
       const error = result.value;
-      if (error.message.includes("not found")) {
-        throw new NotFoundException(error.message);
+      
+      switch (error.constructor) {
+        case WorkspaceDoesntExistError:
+          throw new NotFoundException(error.message);
+        default:
+          throw new InternalServerErrorException(error.message);
       }
-      throw new InternalServerErrorException(error.message);
     }
 
     const { workspace } = result.value;

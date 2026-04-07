@@ -40,7 +40,7 @@ describe("Create Screening Flow Controller (e2e)", () => {
       .set("Authorization", `Bearer ${accessToken}`)
       .send({
         caseType: "Trabalhista",
-        questions: [{ text: "O funcionário fazia horas extras?", type: "boolean" }],
+        questions: [{ question: "O funcionário fazia horas extras?" }],
       });
 
     expect(response.status).toBe(201);

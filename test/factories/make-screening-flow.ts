@@ -15,7 +15,7 @@ export function makeScreeningFlow(
   const screeningFlow = ScreeningFlow.create(
     {
       caseType: faker.lorem.word(),
-      questions: [{ text: faker.lorem.sentence(), type: "boolean" }],
+      questions: [{ question: faker.lorem.sentence() }],
       createdAt: new Date(),
       ...override,
     },

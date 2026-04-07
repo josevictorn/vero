@@ -45,7 +45,7 @@ describe("Edit Screening Flow Controller (e2e)", () => {
       .set("Authorization", `Bearer ${accessToken}`)
       .send({
         caseType: "Civil Alterado",
-        questions: [{ text: "Nova pergunta" }],
+        questions: [{ question: "Nova pergunta" }],
       });
 
     expect(response.status).toBe(200);

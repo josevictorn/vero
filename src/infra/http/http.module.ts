@@ -44,6 +44,18 @@ import { FetchLawyersUseCase } from "@/domain/crm/application/use-cases/fetch-la
 import { EditLawyerUseCase } from "@/domain/crm/application/use-cases/edit-lawyer";
 import { DeleteLawyerUseCase } from "@/domain/crm/application/use-cases/delete-lawyer";
 
+import { CreateLeadController } from "./controllers/crm/create-lead.controller";
+import { GetLeadController } from "./controllers/crm/get-lead.controller";
+import { FetchLeadsController } from "./controllers/crm/fetch-leads.controller";
+import { EditLeadController } from "./controllers/crm/edit-lead.controller";
+import { DeleteLeadController } from "./controllers/crm/delete-lead.controller";
+
+import { CreateLeadUseCase } from "@/domain/crm/application/use-cases/create-lead";
+import { GetLeadUseCase } from "@/domain/crm/application/use-cases/get-lead";
+import { FetchLeadsUseCase } from "@/domain/crm/application/use-cases/fetch-leads";
+import { EditLeadUseCase } from "@/domain/crm/application/use-cases/edit-lead";
+import { DeleteLeadUseCase } from "@/domain/crm/application/use-cases/delete-lead";
+
 @Module({
   imports: [DatabaseModule, CryptographyModule, CaslModule],
   controllers: [
@@ -64,6 +76,11 @@ import { DeleteLawyerUseCase } from "@/domain/crm/application/use-cases/delete-l
     FetchLawyersController,
     EditLawyerController,
     DeleteLawyerController,
+    CreateLeadController,
+    GetLeadController,
+    FetchLeadsController,
+    EditLeadController,
+    DeleteLeadController,
   ],
   providers: [
     RegisterAdminUseCase,
@@ -83,6 +100,11 @@ import { DeleteLawyerUseCase } from "@/domain/crm/application/use-cases/delete-l
     FetchLawyersUseCase,
     EditLawyerUseCase,
     DeleteLawyerUseCase,
+    CreateLeadUseCase,
+    GetLeadUseCase,
+    FetchLeadsUseCase,
+    EditLeadUseCase,
+    DeleteLeadUseCase,
   ],
 })
 export class HttpModule {}
