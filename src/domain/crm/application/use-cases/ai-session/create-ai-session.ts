@@ -5,7 +5,6 @@ import { Either, right } from "@/core/either";
 
 interface CreateAISessionUseCaseRequest {
     chatId: string;
-    chatState: ChatState[];
     status: string;
     name: string;
     cellphone: string;
@@ -21,16 +20,13 @@ export class CreateAISessionUseCase {
     ) {}
 
     async execute(request: CreateAISessionUseCaseRequest): Promise<CreateAISessionUseCaseResponse> {
-        const { chatId, chatState, status, name, cellphone } = request;
+        const { chatId, status, name, cellphone } = request;
 
         const aiSession = AISession.create({
             chatId,
-            chatState,
             status,
             name,
             cellphone,
-            screeningFlowId: "",
-            isThirdParty: false
         });
 
         await this.aiSessionRepository.create(aiSession);

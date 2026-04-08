@@ -12,7 +12,7 @@ const createScreeningFlowBodySchema = z.object({
 type CreateScreeningFlowBodySchema = z.infer<typeof createScreeningFlowBodySchema>;
 
 @ApiTags("Screening Flows")
-@Controller("/screening-flows")
+@Controller("/screeningflows")
 export class CreateScreeningFlowController {
   constructor(private createScreeningFlow: CreateScreeningFlowUseCase) {}
 

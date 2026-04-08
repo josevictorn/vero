@@ -1,6 +1,6 @@
 import { Entity } from "@/core/entity/entity";
 import { UniqueEntityID } from "@/core/entity/unique-entity-id";
-import { Optional } from "@prisma/client/runtime/client";
+import { Optional } from "@/core/types/optional";
 
 export interface ChatState {
     information: string;
@@ -51,10 +51,13 @@ export class AISession extends Entity<AISessionProps> {
         return this.props.createdAt;
     }
 
-        static create(props: Optional<AISessionProps, "createdAt">, id?: UniqueEntityID) {
+    static create(props: Optional<AISessionProps, "createdAt" | "chatState" | "screeningFlowId" | "isThirdParty">, id?: UniqueEntityID) {
         const aiSession = new AISession(
             {
                 ...props,
+                chatState: props.chatState ?? [],
+                screeningFlowId: props.screeningFlowId ?? "",
+                isThirdParty: props.isThirdParty ?? false,
                 createdAt: props.createdAt ?? new Date(),
             },
             id
