@@ -7,7 +7,7 @@ import { z } from "zod";
 
 
 const getCaseAnalysisParamsSchema = z.object({
-    id: z.string(),
+    id: z.uuid(),
 });
 
 type GetCaseAnalysisParamsSchema = z.infer<typeof getCaseAnalysisParamsSchema>;
