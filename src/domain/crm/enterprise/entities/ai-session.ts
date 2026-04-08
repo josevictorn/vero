@@ -1,6 +1,7 @@
 import { Entity } from "@/core/entity/entity";
 import { UniqueEntityID } from "@/core/entity/unique-entity-id";
 import { Optional } from "@/core/types/optional";
+import { StatusEnum } from "./value-objects/status";
 
 export interface ChatState {
     information: string;
@@ -79,7 +80,7 @@ export class AISession extends Entity<AISessionProps> {
                 screeningFlowId: props.screeningFlowId ?? "",
                 isThirdParty: props.isThirdParty ?? false,
                 createdAt: props.createdAt ?? new Date(),
-                status: props.status ?? "identificando",
+                status: props.status ?? StatusEnum.IDENTIFYING,
             },
             id
         );
