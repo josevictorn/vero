@@ -1,98 +1,57 @@
-import type { INestApplication } from "@nestjs/common";
-import { JwtService } from "@nestjs/jwt";
-import { Test } from "@nestjs/testing";
-import request from "supertest";
+import {AccountNotFoundExistsError} from "@/domain/iam/application/use-cases/errors/acount-not-found-error";
+import {UpdateAccountUseCase} from "@/domain/iam/application/use-cases/update-account.ts";
+import { makeAccount } from "test/factories/make-account.ts";
+import { InMemoryAccountsRepository } from "test/repositories/in-memory-accounts-repository.ts";
 
-import { AccountFactory } from "test/factories/make-account";
-import { AppModule } from "@/infra/app.module.ts";
-import { DatabaseModule } from "@/infra/database/database.module";
-import { PrismaService } from "@/infra/database/prisma/prisma.service.ts";
+let inMemoryAccountsRepository: InMemoryAccountsRepository;
+let sut: UpdateAccountUseCase;
 
-describe("Change Password Controller (e2e)", () => {
-  let app: INestApplication;
-  let accountFactory: AccountFactory;
-  let prisma: PrismaService;
-  let jwt: JwtService;
+describe("Update Account Use Case", () => {
+  beforeEach(() => {
+    inMemoryAccountsRepository = new InMemoryAccountsRepository();
 
-  beforeAll(async () => {
-    const moduleRef = await Test.createTestingModule({
-      imports: [AppModule, DatabaseModule],
-      providers: [AccountFactory],
-    }).compile();
-
-    app = moduleRef.createNestApplication();
-
-    accountFactory = moduleRef.get(AccountFactory);
-    prisma = moduleRef.get(PrismaService);
-    jwt = moduleRef.get(JwtService);
-
-    await app.init();
+    sut = new UpdateAccountUseCase(inMemoryAccountsRepository);
   });
 
-  test("[PATCH] /accounts/:id/password", async () => {
-    const account = await accountFactory.makePrismaAccount({
-      password: "hashed-123456", // depende do seu hasher fake/real
+  it("should be able to update account name", async () => {
+    const account = makeAccount({
+      name: "Old Name",
     });
 
-    const accessToken = jwt.sign({
-      sub: account.id.toString(),
+    inMemoryAccountsRepository.items.push(account);
+
+    const result = await sut.execute({
+      accountId: account.id.toString(),
+      name: "New Name",
     });
 
-    const response = await request(app.getHttpServer())
-      .patch(`/accounts/${account.id.toString()}/password`)
-      .set("Authorization", `Bearer ${accessToken}`)
-      .send({
-        currentPassword: "123456",
-        newPassword: "654321",
-      });
-
-    expect(response.status).toBe(200);
-
-    const userOnDatabase = await prisma.user.findUnique({
-      where: {
-        id: account.id.toString(),
-      },
-    });
-
-    expect(userOnDatabase).toBeTruthy();
-    expect(userOnDatabase?.password).not.toBe("hashed-123456");
+    expect(result.isRight()).toBe(true);
+    expect(account.name).toBe("New Name");
   });
 
-  test("[PATCH] /accounts/:id/password (wrong current password)", async () => {
-    const account = await accountFactory.makePrismaAccount({
-      password: "hashed-123456",
+  it("should be able to update account email", async () => {
+    const account = makeAccount({
+      email: "old@email.com",
     });
 
-    const accessToken = jwt.sign({
-      sub: account.id.toString(),
+    inMemoryAccountsRepository.items.push(account);
+
+    const result = await sut.execute({
+      accountId: account.id.toString(),
+      email: "new@email.com",
     });
 
-    const response = await request(app.getHttpServer())
-      .patch(`/accounts/${account.id.toString()}/password`)
-      .set("Authorization", `Bearer ${accessToken}`)
-      .send({
-        currentPassword: "wrong-password",
-        newPassword: "654321",
-      });
-
-    expect(response.status).toBe(400);
+    expect(result.isRight()).toBe(true);
+    expect(account.email).toBe("new@email.com");
   });
 
-  test("[PATCH] /accounts/:id/password (non-existing account)", async () => {
-    const account = await accountFactory.makePrismaAccount();
-
-    const accessToken = jwt.sign({
-      sub: account.id.toString(),
+  it("should not update if account does not exist", async () => {
+    const result = await sut.execute({
+      accountId: "invalid-id",
+      name: "Test",
     });
 
-    const response = await request(app.getHttpServer())
-      .patch(`/accounts/invalid-id/password`)
-      .set("Authorization", `Bearer ${accessToken}`)
-      .send({
-        currentPassword: "123456",
-        newPassword: "654321",
-      });
-
-    expect(response.status).toBe(400);
+    expect(result.isLeft()).toBe(true);
+    expect(result.value).toBeInstanceOf(AccountNotFoundExistsError);
   });
 });
