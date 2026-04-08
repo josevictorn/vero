@@ -1,7 +1,7 @@
 import { CreateCaseAnalysisUseCase } from "@/domain/crm/application/use-cases/case-analysis/create-case-analysis";
 import { CaseAnalysisAlreadyExistsError } from "@/domain/crm/application/use-cases/errors/case-analysis-already-exists-error";
 import { ZodValidationPipe } from "@/infra/http/pipes/zod-validation-pipe";
-import { Body, ConflictException, Controller, HttpCode, InternalServerErrorException, Post } from "@nestjs/common";
+import { Body, ConflictException, Controller, HttpCode, Inject, InternalServerErrorException, Post } from "@nestjs/common";
 import { ApiBody, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { z } from "zod";
 
@@ -22,6 +22,7 @@ type CreateCaseAnalysisBodySchema = z.infer<typeof createCaseAnalysisBodySchema>
 @Controller("/case-analyses")
 export class CreateCaseAnalysisController {
     constructor(
+        @Inject(CreateCaseAnalysisUseCase)
         private createCaseAnalysis: CreateCaseAnalysisUseCase
     ) {}
 
