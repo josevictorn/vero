@@ -1,14 +1,13 @@
 import { FakeHasher } from "test/cryptography/fake-hasher.ts";
-import { FakeComparer } from "test/cryptography/fake-comparer.ts";
 import { makeAccount } from "test/factories/make-account.ts";
 import { InMemoryAccountsRepository } from "test/repositories/in-memory-accounts-repository.ts";
 
 import { ChangePasswordUseCase } from "./change-password.ts";
 import { AccountNotFoundExistsError } from "./errors/acount-not-found-error.ts";
+import { WrongCredentialsError } from "./errors/wrong-credentials-error.ts";
 
 let inMemoryAccountsRepository: InMemoryAccountsRepository;
 let fakeHasher: FakeHasher;
-let fakeComparer: FakeComparer;
 
 let sut: ChangePasswordUseCase;
 
@@ -16,12 +15,11 @@ describe("Change Password Use Case", () => {
   beforeEach(() => {
     inMemoryAccountsRepository = new InMemoryAccountsRepository();
     fakeHasher = new FakeHasher();
-    fakeComparer = new FakeComparer();
 
     sut = new ChangePasswordUseCase(
       inMemoryAccountsRepository,
       fakeHasher,
-      fakeComparer
+      fakeHasher
     );
   });
 
@@ -56,6 +54,7 @@ describe("Change Password Use Case", () => {
     });
 
     expect(result.isLeft()).toBe(true);
+    expect(result.value).toBeInstanceOf(WrongCredentialsError);
   });
 
   it("should not change password if account does not exist", async () => {
