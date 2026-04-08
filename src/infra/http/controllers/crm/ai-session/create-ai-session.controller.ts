@@ -1,6 +1,7 @@
 import { CreateAISessionUseCase } from "@/domain/crm/application/use-cases/ai-session/create-ai-session";
+import { AISessionAlreadyExistsError } from "@/domain/crm/application/use-cases/errors/ai-session-already-exists-error";
 import { ZodValidationPipe } from "@/infra/http/pipes/zod-validation-pipe";
-import { Body, Controller, HttpCode, InternalServerErrorException, Post } from "@nestjs/common";
+import { Body, ConflictException, Controller, HttpCode, InternalServerErrorException, Post } from "@nestjs/common";
 import { ApiBody, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { z } from "zod";
 
@@ -49,7 +50,14 @@ export class CreateAISessionController {
         });
 
         if (result.isLeft()) {
-            throw new InternalServerErrorException("Unexpected error when creating AI session.");
+            const error = result.value;
+        
+            switch (error.constructor) {
+                case AISessionAlreadyExistsError:
+                    throw new ConflictException(error.message);
+                default:
+                    throw new InternalServerErrorException(error.message);
+            }
         }
 
         const { aiSession } = result.value;

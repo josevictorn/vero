@@ -2,6 +2,7 @@ import { Inject, Injectable } from "@nestjs/common";
 import { AISessionRepository } from "../../repositories/ai-session-repository";
 import { AISession, type ChatState } from "@/domain/crm/enterprise/entities/ai-session";
 import { Either, right } from "@/core/either";
+import { AISessionAlreadyExistsError } from "../errors/ai-session-already-exists-error";
 
 interface CreateAISessionUseCaseRequest {
     chatId: string;
@@ -9,7 +10,7 @@ interface CreateAISessionUseCaseRequest {
     cellphone: string;
 }
 
-type CreateAISessionUseCaseResponse = Either<null, { aiSession: AISession }>;
+type CreateAISessionUseCaseResponse = Either<Error, { aiSession: AISession }>;
 
 @Injectable()
 export class CreateAISessionUseCase {
@@ -20,6 +21,12 @@ export class CreateAISessionUseCase {
 
     async execute(request: CreateAISessionUseCaseRequest): Promise<CreateAISessionUseCaseResponse> {
         const { chatId, name, cellphone } = request;
+
+        const aiSessionAlreadyExists = await this.aiSessionRepository.findActiveSessionByChatId(chatId);
+
+        if (aiSessionAlreadyExists) {
+            throw new AISessionAlreadyExistsError();
+        }
 
         const aiSession = AISession.create({
             chatId,
