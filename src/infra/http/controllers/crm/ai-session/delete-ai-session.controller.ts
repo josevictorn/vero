@@ -1,7 +1,7 @@
 import { DeleteAISessionUseCase } from "@/domain/crm/application/use-cases/ai-session/delete-ai-session";
 import { AISessionNotFoundError } from "@/domain/crm/application/use-cases/errors/ai-session-not-found-error";
 import { ZodValidationPipe } from "@/infra/http/pipes/zod-validation-pipe";
-import { ConflictException, Controller, Delete, HttpCode, Inject, InternalServerErrorException, Param } from "@nestjs/common";
+import { Controller, Delete, HttpCode, Inject, InternalServerErrorException, NotFoundException, Param } from "@nestjs/common";
 import { ApiParam, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { z } from "zod";
 
@@ -46,7 +46,7 @@ export class DeleteAISessionController {
         
             switch (error.constructor) {
                 case AISessionNotFoundError:
-                    throw new ConflictException(error.message);
+                    throw new NotFoundException(error.message);
                 default:
                     throw new InternalServerErrorException(error.message);
             }
