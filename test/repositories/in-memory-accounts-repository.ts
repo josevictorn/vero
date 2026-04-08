@@ -39,4 +39,12 @@ export class InMemoryAccountsRepository implements AccountsRepository {
     this.items.push(account);
     return Promise.resolve();
   }
+
+  save(account: Account) {
+    const itemIndex = this.items.findIndex((item) => item.id === account.id);
+
+    this.items[itemIndex] = account;
+
+    return Promise.resolve();
+  }
 }
