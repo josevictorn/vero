@@ -12,7 +12,14 @@ export class FetchAISessionController {
 
     @Get()
     @HttpCode(200)
-
+    @ApiResponse({
+        status: 200,
+        description: "AI sessions fetched successfully",
+    })
+    @ApiResponse({
+        status: 500,
+        description: "Internal server error",
+    })
     async handle(){
         const result = await this.fetchAISessionsUseCase.execute();
 
