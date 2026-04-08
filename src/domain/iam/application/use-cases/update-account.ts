@@ -1,13 +1,14 @@
-import { Account } from "../../enterprise/entities/account"
+import { Inject, Injectable } from "@nestjs/common";
 import { type Either, left, right } from "@/core/either";
-import {AccountNotFoundExistsError} from "./errors/acount-not-found-error";
-import {Inject, Injectable} from "@nestjs/common";
-import {AccountsRepository} from "../repositories/accounts-repository";
+import type { Account } from "../../enterprise/entities/account";
+import { AccountsRepository } from "../repositories/accounts-repository";
+import { AccountNotFoundExistsError } from "./errors/acount-not-found-error";
+import { EmailAlreadyInUseError } from "./errors/email-already-in-use-error";
 
 interface UpdateAccountUseCaseRequest {
-    accountId: string,
-    name?: string,
-    email?: string
+  accountId: string;
+  email?: string;
+  name?: string;
 }
 
 type UpdateAccountUseCaseResponse = Either<
@@ -19,7 +20,7 @@ type UpdateAccountUseCaseResponse = Either<
 export class UpdateAccountUseCase {
   constructor(
     @Inject(AccountsRepository)
-    private readonly accountsRepository: AccountsRepository,
+    private readonly accountsRepository: AccountsRepository
   ) {}
 
   async execute({
@@ -33,10 +34,6 @@ export class UpdateAccountUseCase {
       return left(new AccountNotFoundExistsError(accountId));
     }
 
-    if (!name && !email) {
-      return left(new Error("No data provided"));
-    }
-
     if (email) {
       const accountWithSameEmail =
         await this.accountsRepository.findByEmail(email);
@@ -45,14 +42,12 @@ export class UpdateAccountUseCase {
         accountWithSameEmail &&
         accountWithSameEmail.id.toString() !== accountId
       ) {
-        return left(new Error("Email already in use"));
+        return left(new EmailAlreadyInUseError(email));
       }
     }
 
-    account.update({
-      name,
-      email,
-    });
+    account.email = email || account.email;
+    account.name = name || account.name;
 
     await this.accountsRepository.save(account);
 

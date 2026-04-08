@@ -1,8 +1,8 @@
 import { makeAccount } from "test/factories/make-account.ts";
 import { InMemoryAccountsRepository } from "test/repositories/in-memory-accounts-repository.ts";
-
-import { UpdateAccountUseCase } from "./update-account.ts";
 import { AccountNotFoundExistsError } from "./errors/acount-not-found-error.ts";
+import { EmailAlreadyInUseError } from "./errors/email-already-in-use-error.ts";
+import { UpdateAccountUseCase } from "./update-account.ts";
 
 let inMemoryAccountsRepository: InMemoryAccountsRepository;
 
@@ -44,7 +44,7 @@ describe("Update Account Use Case", () => {
     inMemoryAccountsRepository.items.push(account);
 
     const result = await sut.execute({
-      userId: account.id.toString(),
+      accountId: account.id.toString(),
       email: "new@email.com",
     });
 
@@ -66,7 +66,7 @@ describe("Update Account Use Case", () => {
     inMemoryAccountsRepository.items.push(account);
 
     const result = await sut.execute({
-      userId: account.id.toString(),
+      accountId: account.id.toString(),
       name: "New Name",
       email: "new@email.com",
     });
@@ -81,9 +81,29 @@ describe("Update Account Use Case", () => {
     });
   });
 
+  it("should not be able to update account email with email already in use", async () => {
+    const account1 = makeAccount({
+      email: "email@email.com",
+    });
+
+    const account2 = makeAccount({
+      email: "emailone@email.com",
+    });
+
+    inMemoryAccountsRepository.items.push(account1, account2);
+
+    const result = await sut.execute({
+      accountId: account2.id.toString(),
+      email: account1.email,
+    });
+
+    expect(result.isLeft()).toBe(true);
+    expect(result.value).toBeInstanceOf(EmailAlreadyInUseError);
+  });
+
   it("should not be able to update a non-existing account", async () => {
     const result = await sut.execute({
-      userId: "invalid-id",
+      accountId: "invalid-id",
       name: "Test",
     });
 
