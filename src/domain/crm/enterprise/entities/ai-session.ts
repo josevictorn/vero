@@ -51,7 +51,7 @@ export class AISession extends Entity<AISessionProps> {
         return this.props.createdAt;
     }
 
-    static create(props: Optional<AISessionProps, "createdAt" | "chatState" | "screeningFlowId" | "isThirdParty">, id?: UniqueEntityID) {
+    static create(props: Optional<AISessionProps, "createdAt" | "chatState" | "screeningFlowId" | "isThirdParty" | "status">, id?: UniqueEntityID) {
         const aiSession = new AISession(
             {
                 ...props,
@@ -59,6 +59,7 @@ export class AISession extends Entity<AISessionProps> {
                 screeningFlowId: props.screeningFlowId ?? "",
                 isThirdParty: props.isThirdParty ?? false,
                 createdAt: props.createdAt ?? new Date(),
+                status: props.status ?? "identificando",
             },
             id
         );

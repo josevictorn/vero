@@ -56,6 +56,10 @@ import { FetchLeadsUseCase } from "@/domain/crm/application/use-cases/lead/fetch
 import { EditLeadUseCase } from "@/domain/crm/application/use-cases/lead/edit-lead";
 import { DeleteLeadUseCase } from "@/domain/crm/application/use-cases/lead/delete-lead";
 
+import { CreateAISessionController } from "./controllers/crm/ai-session/create-ai-session.controller";
+
+import { CreateAISessionUseCase } from "@/domain/crm/application/use-cases/ai-session/create-ai-session";
+
 @Module({
   imports: [DatabaseModule, CryptographyModule, CaslModule],
   controllers: [
@@ -81,6 +85,7 @@ import { DeleteLeadUseCase } from "@/domain/crm/application/use-cases/lead/delet
     FetchLeadsController,
     EditLeadController,
     DeleteLeadController,
+    CreateAISessionController,
   ],
   providers: [
     RegisterAdminUseCase,
@@ -105,6 +110,7 @@ import { DeleteLeadUseCase } from "@/domain/crm/application/use-cases/lead/delet
     FetchLeadsUseCase,
     EditLeadUseCase,
     DeleteLeadUseCase,
+    CreateAISessionUseCase,
   ],
 })
 export class HttpModule {}

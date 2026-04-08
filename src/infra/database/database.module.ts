@@ -12,6 +12,8 @@ import { LawyersRepository } from "@/domain/crm/application/repositories/lawyers
 import { PrismaLawyersRepository } from "./prisma/repositories/prisma-lawyers-repository";
 import { LeadsRepository } from "@/domain/crm/application/repositories/leads-repository";
 import { PrismaLeadsRepository } from "./prisma/repositories/prisma-leads-repository";
+import { AISessionRepository } from "@/domain/crm/application/repositories/ai-session-repository";
+import { PrismaAISessionRepository } from "./prisma/repositories/prisma-ai-session-repository";
 
 @Module({
   providers: [
@@ -40,6 +42,10 @@ import { PrismaLeadsRepository } from "./prisma/repositories/prisma-leads-reposi
       provide: LeadsRepository,
       useClass: PrismaLeadsRepository,
     },
+    {
+      provide: AISessionRepository,
+      useClass: PrismaAISessionRepository,
+    }
   ],
   exports: [
     PrismaService,
@@ -49,6 +55,7 @@ import { PrismaLeadsRepository } from "./prisma/repositories/prisma-leads-reposi
     WorkspacesRepository,
     LawyersRepository,
     LeadsRepository,
+    AISessionRepository
   ],
 })
 export class DatabaseModule {}
