@@ -3,6 +3,7 @@ import { AISession, ChatState } from "@/domain/crm/enterprise/entities/ai-sessio
 import { StatusEnum } from "@/domain/crm/enterprise/entities/value-objects/status";
 import { AISessionRepository } from "../../repositories/ai-session-repository";
 import { AISessionNotFoundError } from "../errors/ai-session-not-found-error";
+import { Inject, Injectable } from "@nestjs/common";
 
 
 interface EditAiSessionUseCaseRequest {
@@ -16,8 +17,10 @@ interface EditAiSessionUseCaseRequest {
 
 type EditAiSessionUseCaseResponse = Either<Error, { aiSession: AISession }>;
 
+@Injectable()
 export class EditAiSessionUseCase {
     constructor(
+        @Inject(AISessionRepository)
         private aiSessionRepository: AISessionRepository
     ) {}
 
