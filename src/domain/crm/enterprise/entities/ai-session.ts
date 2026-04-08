@@ -51,6 +51,26 @@ export class AISession extends Entity<AISessionProps> {
         return this.props.createdAt;
     }
 
+    set status(status: string) {
+        this.props.status = status;
+    }
+
+    set chatState(chatState: ChatState[]) {
+        this.props.chatState = chatState;
+    }
+
+    set name(name: string) {
+        this.props.name = name;
+    }
+
+    set cellphone(cellphone: string) {
+        this.props.cellphone = cellphone;
+    }
+
+    set isThirdParty(isThirdParty: boolean) {
+        this.props.isThirdParty = isThirdParty;
+    }
+
     static create(props: Optional<AISessionProps, "createdAt" | "chatState" | "screeningFlowId" | "isThirdParty" | "status">, id?: UniqueEntityID) {
         const aiSession = new AISession(
             {
