@@ -1,11 +1,14 @@
 import { FetchScreeningFlowsUseCase } from "@/domain/crm/application/use-cases/screening-flow/fetch-screening-flows";
-import { Controller, Get, InternalServerErrorException } from "@nestjs/common";
+import { Controller, Get, Inject, InternalServerErrorException } from "@nestjs/common";
 import { ApiResponse, ApiTags } from "@nestjs/swagger";
 
 @ApiTags("Screening Flows")
 @Controller("/screening-flows")
 export class FetchScreeningFlowsController {
-  constructor(private fetchScreeningFlows: FetchScreeningFlowsUseCase) {}
+  constructor(
+    @Inject(FetchScreeningFlowsUseCase)
+    private fetchScreeningFlows: FetchScreeningFlowsUseCase
+  ) {}
 
   @Get()
   @ApiResponse({ status: 200, description: "List of screening flows" })

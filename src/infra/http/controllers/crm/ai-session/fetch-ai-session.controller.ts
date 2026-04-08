@@ -1,7 +1,9 @@
 import { FetchAISessionsUseCase } from "@/domain/crm/application/use-cases/ai-session/fetch-ai-sessions";
 import { Controller, Get, HttpCode, Inject, InternalServerErrorException } from "@nestjs/common";
+import { ApiResponse, ApiTags } from "@nestjs/swagger";
 
-@Controller()
+@ApiTags("AI Session")
+@Controller("/ai-sessions")
 export class FetchAISessionController {
     constructor(
         @Inject(FetchAISessionsUseCase)
@@ -10,6 +12,7 @@ export class FetchAISessionController {
 
     @Get()
     @HttpCode(200)
+
     async handle(){
         const result = await this.fetchAISessionsUseCase.execute();
 

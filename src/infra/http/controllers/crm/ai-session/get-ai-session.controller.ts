@@ -1,7 +1,7 @@
 import { GetAISessionUseCase } from "@/domain/crm/application/use-cases/ai-session/get-ai-session";
 import { AISessionNotFoundError } from "@/domain/crm/application/use-cases/errors/ai-session-not-found-error";
 import { ZodValidationPipe } from "@/infra/http/pipes/zod-validation-pipe";
-import { ConflictException, Controller, Get, HttpCode, InternalServerErrorException, Param } from "@nestjs/common";
+import { ConflictException, Controller, Get, HttpCode, Inject, InternalServerErrorException, Param } from "@nestjs/common";
 import { ApiParam, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { z } from "zod";
 
@@ -15,7 +15,10 @@ type GetAISessionParamsSchema = z.infer<typeof getAISessionParamsSchema>;
 @ApiTags("AI Session")
 @Controller("/ai-sessions/:id")
 export class GetAISessionController {
-    constructor(private getAISession: GetAISessionUseCase) {}
+    constructor(
+        @Inject(GetAISessionUseCase)
+        private getAISession: GetAISessionUseCase
+    ) {}
 
     @Get()
     @HttpCode(200)

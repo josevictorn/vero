@@ -1,12 +1,15 @@
 import { LawyerNotFoundError } from "@/domain/crm/application/use-cases/errors/lawyer-not-found-error";
 import { GetLawyerUseCase } from "@/domain/crm/application/use-cases/lawyer/get-lawyer";
-import { Controller, Get, Param, NotFoundException, InternalServerErrorException } from "@nestjs/common";
+import { Controller, Get, Param, NotFoundException, InternalServerErrorException, Inject } from "@nestjs/common";
 import { ApiResponse, ApiTags } from "@nestjs/swagger";
 
 @ApiTags("Lawyers")
 @Controller("/lawyers/:id")
 export class GetLawyerController {
-  constructor(private getLawyer: GetLawyerUseCase) {}
+  constructor(
+    @Inject(GetLawyerUseCase)
+    private getLawyer: GetLawyerUseCase
+  ) {}
 
   @Get()
   @ApiResponse({ status: 200, description: "Lawyer fetched successfully" })

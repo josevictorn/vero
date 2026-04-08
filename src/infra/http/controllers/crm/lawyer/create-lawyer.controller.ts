@@ -1,15 +1,7 @@
 import { CreateLawyerUseCase } from "@/domain/crm/application/use-cases/lawyer/create-lawyer";
 import { LawyerAlreadyExistsError } from "@/domain/crm/application/use-cases/errors/lawyer-already-exists-error";
 import { WorkspaceDoesntExistError } from "@/domain/crm/application/use-cases/errors/workspace-doesnt-exist-error";
-import {
-  Body,
-  Controller,
-  HttpCode,
-  Post,
-  ConflictException,
-  InternalServerErrorException,
-  NotFoundException,
-} from "@nestjs/common";
+import { Controller, Inject, Post, HttpCode, Body, ConflictException, NotFoundException, InternalServerErrorException } from "@nestjs/common";
 import { ApiBody, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { z } from "zod";
 import { ZodValidationPipe } from "../../../pipes/zod-validation-pipe";
@@ -24,7 +16,10 @@ type CreateLawyerBodySchema = z.infer<typeof createLawyerBodySchema>;
 @ApiTags("Lawyers")
 @Controller("/lawyers")
 export class CreateLawyerController {
-  constructor(private createLawyer: CreateLawyerUseCase) {}
+  constructor(
+    @Inject(CreateLawyerUseCase)
+    private createLawyer: CreateLawyerUseCase
+  ) {}
 
   @Post()
   @HttpCode(201)

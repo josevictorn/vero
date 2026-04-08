@@ -1,12 +1,15 @@
 import { DeleteLeadUseCase } from "@/domain/crm/application/use-cases/lead/delete-lead";
 import { LeadNotFoundError } from "@/domain/crm/application/use-cases/errors/lead-not-found-error";
-import { Controller, HttpCode, Delete, Param, NotFoundException, InternalServerErrorException } from "@nestjs/common";
+import { Controller, HttpCode, Delete, Param, NotFoundException, InternalServerErrorException, Inject } from "@nestjs/common";
 import { ApiResponse, ApiTags } from "@nestjs/swagger";
 
 @ApiTags("Leads")
 @Controller("/leads/:id")
 export class DeleteLeadController {
-  constructor(private deleteLead: DeleteLeadUseCase) {}
+  constructor(
+    @Inject(DeleteLeadUseCase)
+    private deleteLead: DeleteLeadUseCase
+  ) {}
 
   @Delete()
   @HttpCode(204)

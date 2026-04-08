@@ -1,12 +1,15 @@
 import { DeleteLawyerUseCase } from "@/domain/crm/application/use-cases/lawyer/delete-lawyer";
 import { LawyerNotFoundError } from "@/domain/crm/application/use-cases/errors/lawyer-not-found-error";
-import { Controller, HttpCode, Delete, Param, NotFoundException, InternalServerErrorException } from "@nestjs/common";
+import { Controller, HttpCode, Delete, Param, NotFoundException, InternalServerErrorException, Inject } from "@nestjs/common";
 import { ApiResponse, ApiTags } from "@nestjs/swagger";
 
 @ApiTags("Lawyers")
 @Controller("/lawyers/:id")
 export class DeleteLawyerController {
-  constructor(private deleteLawyer: DeleteLawyerUseCase) {}
+  constructor(
+    @Inject(DeleteLawyerUseCase)
+    private deleteLawyer: DeleteLawyerUseCase
+  ) {}
 
   @Delete()
   @HttpCode(204)

@@ -5,6 +5,7 @@ import {
   Body,
   Controller,
   HttpCode,
+  Inject,
   Post,
   NotFoundException,
   InternalServerErrorException,
@@ -25,7 +26,10 @@ type CreateLeadBodySchema = z.infer<typeof createLeadBodySchema>;
 @ApiTags("Leads")
 @Controller("/leads")
 export class CreateLeadController {
-  constructor(private createLead: CreateLeadUseCase) {}
+  constructor(
+    @Inject(CreateLeadUseCase)
+    private createLead: CreateLeadUseCase
+  ) {}
 
   @Post()
   @HttpCode(201)

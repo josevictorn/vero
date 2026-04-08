@@ -1,6 +1,6 @@
 import { EditLawyerUseCase } from "@/domain/crm/application/use-cases/lawyer/edit-lawyer";
 import { LawyerNotFoundError } from "@/domain/crm/application/use-cases/errors/lawyer-not-found-error";
-import { Body, Controller, HttpCode, Param, Put, NotFoundException, InternalServerErrorException } from "@nestjs/common";
+import { Body, Controller, HttpCode, Inject, Param, Put, NotFoundException, InternalServerErrorException } from "@nestjs/common";
 import { ApiBody, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { z } from "zod";
 import { ZodValidationPipe } from "../../../pipes/zod-validation-pipe";
@@ -14,7 +14,10 @@ type EditLawyerBodySchema = z.infer<typeof editLawyerBodySchema>;
 @ApiTags("Lawyers")
 @Controller("/lawyers/:id")
 export class EditLawyerController {
-  constructor(private editLawyer: EditLawyerUseCase) {}
+  constructor(
+    @Inject(EditLawyerUseCase)
+    private editLawyer: EditLawyerUseCase
+  ) {}
 
   @Put()
   @HttpCode(200)

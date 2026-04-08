@@ -1,12 +1,15 @@
 import { WorkspaceDoesntExistError } from "@/domain/crm/application/use-cases/errors/workspace-doesnt-exist-error";
 import { GetWorkspaceUseCase } from "@/domain/crm/application/use-cases/workspace/get-workspace";
-import { Controller, Get, NotFoundException, InternalServerErrorException } from "@nestjs/common";
+import { Controller, Get, NotFoundException, InternalServerErrorException, Inject } from "@nestjs/common";
 import { ApiResponse, ApiTags } from "@nestjs/swagger";
 
 @ApiTags("Workspace")
 @Controller("/workspace")
 export class GetWorkspaceController {
-  constructor(private getWorkspace: GetWorkspaceUseCase) {}
+  constructor(
+    @Inject(GetWorkspaceUseCase)
+    private getWorkspace: GetWorkspaceUseCase
+  ) {}
 
   @Get()
   @ApiResponse({ status: 200, description: "Workspace returned successfully" })

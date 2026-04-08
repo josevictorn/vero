@@ -1,6 +1,6 @@
 import { EditScreeningFlowUseCase } from "@/domain/crm/application/use-cases/screening-flow/edit-screening-flow";
 import { ScreeningFlowNotFoundError } from "@/domain/crm/application/use-cases/errors/screening-flow-not-found-error";
-import { Body, Controller, HttpCode, Param, Put, NotFoundException, InternalServerErrorException } from "@nestjs/common";
+import { Body, Controller, HttpCode, Inject, Param, Put, NotFoundException, InternalServerErrorException } from "@nestjs/common";
 import { ApiBody, ApiResponse, ApiTags, ApiParam } from "@nestjs/swagger";
 import { z } from "zod";
 import { ZodValidationPipe } from "../../../pipes/zod-validation-pipe";
@@ -15,7 +15,10 @@ type EditScreeningFlowBodySchema = z.infer<typeof editScreeningFlowBodySchema>;
 @ApiTags("Screening Flows")
 @Controller("/screening-flows")
 export class EditScreeningFlowController {
-  constructor(private editScreeningFlow: EditScreeningFlowUseCase) {}
+  constructor(
+    @Inject(EditScreeningFlowUseCase)
+    private editScreeningFlow: EditScreeningFlowUseCase
+  ) {}
 
   @Put("/:id")
   @HttpCode(200)

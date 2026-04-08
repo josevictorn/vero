@@ -1,5 +1,5 @@
 import { CreateScreeningFlowUseCase } from "@/domain/crm/application/use-cases/screening-flow/create-screening-flow";
-import { Body, Controller, HttpCode, InternalServerErrorException, Post, UsePipes } from "@nestjs/common";
+import { Body, Controller, HttpCode, Inject, InternalServerErrorException, Post, UsePipes } from "@nestjs/common";
 import { ApiBody, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { z } from "zod";
 import { ZodValidationPipe } from "../../../pipes/zod-validation-pipe";
@@ -14,7 +14,10 @@ type CreateScreeningFlowBodySchema = z.infer<typeof createScreeningFlowBodySchem
 @ApiTags("Screening Flows")
 @Controller("/screening-flows")
 export class CreateScreeningFlowController {
-  constructor(private createScreeningFlow: CreateScreeningFlowUseCase) {}
+  constructor(
+    @Inject(CreateScreeningFlowUseCase)
+    private createScreeningFlow: CreateScreeningFlowUseCase
+  ) {}
 
   @Post()
   @HttpCode(201)

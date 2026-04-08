@@ -1,11 +1,14 @@
 import { FetchLeadsUseCase } from "@/domain/crm/application/use-cases/lead/fetch-leads";
-import { Controller, Get, InternalServerErrorException } from "@nestjs/common";
+import { Controller, Get, Inject, InternalServerErrorException } from "@nestjs/common";
 import { ApiResponse, ApiTags } from "@nestjs/swagger";
 
 @ApiTags("Leads")
 @Controller("/leads")
 export class FetchLeadsController {
-  constructor(private fetchLeads: FetchLeadsUseCase) {}
+  constructor(
+    @Inject(FetchLeadsUseCase)
+    private fetchLeads: FetchLeadsUseCase
+  ) {}
 
   @Get()
   @ApiResponse({ status: 200, description: "List of leads in the workspace" })

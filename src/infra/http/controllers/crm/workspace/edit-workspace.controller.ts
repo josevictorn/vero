@@ -1,6 +1,6 @@
 import { EditWorkspaceUseCase } from "@/domain/crm/application/use-cases/workspace/edit-workspace";
 import { WorkspaceDoesntExistError } from "@/domain/crm/application/use-cases/errors/workspace-doesnt-exist-error";
-import { Body, Controller, HttpCode, Put, NotFoundException, InternalServerErrorException } from "@nestjs/common";
+import { Body, Controller, HttpCode, Inject, Put, NotFoundException, InternalServerErrorException } from "@nestjs/common";
 import { ApiBody, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { z } from "zod";
 import { ZodValidationPipe } from "../../../pipes/zod-validation-pipe";
@@ -17,7 +17,10 @@ type EditWorkspaceBodySchema = z.infer<typeof editWorkspaceBodySchema>;
 @ApiTags("Workspace")
 @Controller("/workspace")
 export class EditWorkspaceController {
-  constructor(private editWorkspace: EditWorkspaceUseCase) {}
+  constructor(
+    @Inject(EditWorkspaceUseCase)
+    private editWorkspace: EditWorkspaceUseCase
+  ) {}
 
   @Put()
   @HttpCode(200)

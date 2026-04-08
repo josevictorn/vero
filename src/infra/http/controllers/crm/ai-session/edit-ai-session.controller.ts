@@ -2,7 +2,7 @@ import { EditAiSessionUseCase } from "@/domain/crm/application/use-cases/ai-sess
 import { AISessionNotFoundError } from "@/domain/crm/application/use-cases/errors/ai-session-not-found-error";
 import { StatusEnum } from "@/domain/crm/enterprise/entities/value-objects/status";
 import { ZodValidationPipe } from "@/infra/http/pipes/zod-validation-pipe";
-import { Body, ConflictException, Controller, HttpCode, InternalServerErrorException, Put } from "@nestjs/common";
+import { Body, ConflictException, Controller, HttpCode, Inject, InternalServerErrorException, Put } from "@nestjs/common";
 import { ApiBody, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { z }from "zod";
 
@@ -22,7 +22,10 @@ type EditAISessionBodySchema = z.infer<typeof editAiSessionBodySchema>;
 @ApiTags("AI Session")
 @Controller("/ai-sessions/:id")
 export class EditAISessionController {
-    constructor(private editAiSession: EditAiSessionUseCase) {}
+    constructor(
+        @Inject(EditAiSessionUseCase)
+        private editAiSession: EditAiSessionUseCase
+    ) {}
 
     @Put()
     @HttpCode(200)

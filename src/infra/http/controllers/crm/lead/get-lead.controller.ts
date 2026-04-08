@@ -1,12 +1,15 @@
 import { LeadNotFoundError } from "@/domain/crm/application/use-cases/errors/lead-not-found-error";
 import { GetLeadUseCase } from "@/domain/crm/application/use-cases/lead/get-lead";
-import { Controller, Get, Param, NotFoundException, InternalServerErrorException } from "@nestjs/common";
+import { Controller, Get, Param, NotFoundException, InternalServerErrorException, Inject } from "@nestjs/common";
 import { ApiResponse, ApiTags } from "@nestjs/swagger";
 
 @ApiTags("Leads")
 @Controller("/leads/:id")
 export class GetLeadController {
-  constructor(private getLead: GetLeadUseCase) {}
+  constructor(
+    @Inject(GetLeadUseCase)
+    private getLead: GetLeadUseCase
+  ) {}
 
   @Get()
   @ApiResponse({ status: 200, description: "Lead fetched successfully" })

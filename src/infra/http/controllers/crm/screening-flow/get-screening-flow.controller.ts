@@ -1,12 +1,15 @@
 import { ScreeningFlowNotFoundError } from "@/domain/crm/application/use-cases/errors/screening-flow-not-found-error";
 import { GetScreeningFlowUseCase } from "@/domain/crm/application/use-cases/screening-flow/get-screening-flow";
-import { Controller, Get, Param, NotFoundException, InternalServerErrorException } from "@nestjs/common";
+import { Controller, Get, Param, NotFoundException, InternalServerErrorException, Inject } from "@nestjs/common";
 import { ApiResponse, ApiTags, ApiParam } from "@nestjs/swagger";
 
 @ApiTags("Screening Flows")
 @Controller("/screening-flows")
 export class GetScreeningFlowController {
-  constructor(private getScreeningFlow: GetScreeningFlowUseCase) {}
+  constructor(
+    @Inject(GetScreeningFlowUseCase)
+    private getScreeningFlow: GetScreeningFlowUseCase
+  ) {}
 
   @Get("/:id")
   @ApiParam({ name: "id", type: "string" })

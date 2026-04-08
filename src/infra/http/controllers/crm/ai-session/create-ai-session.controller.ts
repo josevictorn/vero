@@ -1,7 +1,7 @@
 import { CreateAISessionUseCase } from "@/domain/crm/application/use-cases/ai-session/create-ai-session";
 import { AISessionAlreadyExistsError } from "@/domain/crm/application/use-cases/errors/ai-session-already-exists-error";
 import { ZodValidationPipe } from "@/infra/http/pipes/zod-validation-pipe";
-import { Body, ConflictException, Controller, HttpCode, InternalServerErrorException, Post } from "@nestjs/common";
+import { Body, ConflictException, Controller, HttpCode, Inject, InternalServerErrorException, Post } from "@nestjs/common";
 import { ApiBody, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { z } from "zod";
 
@@ -15,9 +15,12 @@ const createAISessionBodySchema = z.object({
 type CreateAISessionBodySchema = z.infer<typeof createAISessionBodySchema>;
 
 @ApiTags("AI Session")
-@Controller("/ai-session")
+@Controller("/ai-sessions")
 export class CreateAISessionController {
-    constructor(private createAiSession: CreateAISessionUseCase) {}
+    constructor(
+        @Inject(CreateAISessionUseCase)
+        private createAiSession: CreateAISessionUseCase
+    ) {}
 
     @Post()
     @HttpCode(201)

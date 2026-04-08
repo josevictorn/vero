@@ -1,7 +1,7 @@
 import { EditLeadUseCase } from "@/domain/crm/application/use-cases/lead/edit-lead";
 import { LawyerNotFoundError } from "@/domain/crm/application/use-cases/errors/lawyer-not-found-error";
 import { LeadNotFoundError } from "@/domain/crm/application/use-cases/errors/lead-not-found-error";
-import { Body, Controller, HttpCode, Param, Put, NotFoundException, InternalServerErrorException } from "@nestjs/common";
+import { Body, Controller, HttpCode, Inject, Param, Put, NotFoundException, InternalServerErrorException } from "@nestjs/common";
 import { ApiBody, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { z } from "zod";
 import { ZodValidationPipe } from "../../../pipes/zod-validation-pipe";
@@ -18,7 +18,10 @@ type EditLeadBodySchema = z.infer<typeof editLeadBodySchema>;
 @ApiTags("Leads")
 @Controller("/leads/:id")
 export class EditLeadController {
-  constructor(private editLead: EditLeadUseCase) {}
+  constructor(
+    @Inject(EditLeadUseCase)
+    private editLead: EditLeadUseCase
+  ) {}
 
   @Put()
   @HttpCode(200)
