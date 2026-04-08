@@ -7,7 +7,7 @@ import { ApiBody, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { z }from "zod";
 
 const editAiSessionBodySchema = z.object({
-    id: z.string(),
+    id: z.uuid(),
     status: z.enum(StatusEnum),
     chatState: z.array(z.object({
         information: z.string(),
@@ -17,11 +17,11 @@ const editAiSessionBodySchema = z.object({
     isThirdParty: z.boolean(),
 })
 
-type EditAiSessionBodySchema = z.infer<typeof editAiSessionBodySchema>;
+type EditAISessionBodySchema = z.infer<typeof editAiSessionBodySchema>;
 
 @ApiTags("AI Session")
 @Controller("/ai-sessions/:id")
-export class EditAiSessionController {
+export class EditAISessionController {
     constructor(private editAiSession: EditAiSessionUseCase) {}
 
     @Put()
@@ -30,7 +30,7 @@ export class EditAiSessionController {
         schema: {
             type: "object",
             properties: {
-                id: { type: "string", example: "1" },
+                id: { type: "uuid", example: "{id}" },
                 status: { type: "string", enum: Object.values(StatusEnum) },
                 chatState: { type: "array", items: { type: "object", properties: { information: { type: "string" } } } },
                 name: { type: "string", example: "fulano" },
@@ -48,7 +48,7 @@ export class EditAiSessionController {
         status: 404,
         description: "AI session not found",
     })
-    async handle(@Body(new ZodValidationPipe(editAiSessionBodySchema)) body: EditAiSessionBodySchema){
+    async handle(@Body(new ZodValidationPipe(editAiSessionBodySchema)) body: EditAISessionBodySchema){
         const { id, status, chatState, name, cellphone, isThirdParty } = body;
 
         const result = await this.editAiSession.execute({
