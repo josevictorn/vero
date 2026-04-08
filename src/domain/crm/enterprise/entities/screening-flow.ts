@@ -14,20 +14,6 @@ export interface ScreeningFlowProps {
 }
 
 export class ScreeningFlow extends Entity<ScreeningFlowProps> {
-  static create(
-    props: Optional<ScreeningFlowProps, "createdAt">,
-    id?: UniqueEntityID
-  ) {
-    const screeningFlow = new ScreeningFlow(
-      {
-        ...props,
-        createdAt: props.createdAt ?? new Date(),
-      },
-      id
-    );
-
-    return screeningFlow;
-  }
 
   get caseType() {
     return this.props.caseType;
@@ -47,6 +33,21 @@ export class ScreeningFlow extends Entity<ScreeningFlowProps> {
 
   set questions(questions: Question[]) {
     this.props.questions = questions;
+  }
+
+  static create(
+    props: Optional<ScreeningFlowProps, "createdAt">,
+    id?: UniqueEntityID
+  ) {
+    const screeningFlow = new ScreeningFlow(
+      {
+        ...props,
+        createdAt: props.createdAt ?? new Date(),
+      },
+      id
+    );
+
+    return screeningFlow;
   }
 }
 
