@@ -57,20 +57,27 @@ import { EditLeadUseCase } from "@/domain/crm/application/use-cases/lead/edit-le
 import { DeleteLeadUseCase } from "@/domain/crm/application/use-cases/lead/delete-lead";
 
 import { CreateAISessionController } from "./controllers/crm/ai-session/create-ai-session.controller";
+import { EditAISessionController } from "./controllers/crm/ai-session/edit-ai-session.controller";
+import { GetAISessionController } from "./controllers/crm/ai-session/get-ai-session.controller";
+import { FetchAISessionController } from "./controllers/crm/ai-session/fetch-ai-session.controller";
+import { DeleteAISessionController } from "./controllers/crm/ai-session/delete-ai-session.controller";
 
 import { CreateAISessionUseCase } from "@/domain/crm/application/use-cases/ai-session/create-ai-session";
-import { EditAISessionController } from "./controllers/crm/ai-session/edit-ai-session.controller";
 import { EditAISessionUseCase } from "@/domain/crm/application/use-cases/ai-session/edit-ai-session";
-import { GetAISessionController } from "./controllers/crm/ai-session/get-ai-session.controller";
 import { GetAISessionUseCase } from "@/domain/crm/application/use-cases/ai-session/get-ai-session";
-import { FetchAISessionController } from "./controllers/crm/ai-session/fetch-ai-session.controller";
 import { FetchAISessionsUseCase } from "@/domain/crm/application/use-cases/ai-session/fetch-ai-sessions";
-import { DeleteAISessionController } from "./controllers/crm/ai-session/delete-ai-session.controller";
 import { DeleteAISessionUseCase } from "@/domain/crm/application/use-cases/ai-session/delete-ai-session";
+
 import { CreateCaseAnalysisController } from "./controllers/crm/case-analysis/create-case-analysis.controller";
 import { GetCaseAnalysisController } from "./controllers/crm/case-analysis/get-case-analysis.controller";
+import { FetchCaseAnalysisController } from "./controllers/crm/case-analysis/fetch-case-analysis.controller";
+import { DeleteCaseAnalysisController } from "./controllers/crm/case-analysis/delete-case-analysis.controller";
+
 import { CreateCaseAnalysisUseCase } from "@/domain/crm/application/use-cases/case-analysis/create-case-analysis";
 import { GetCaseAnalysisUseCase } from "@/domain/crm/application/use-cases/case-analysis/get-case-analysis";
+import { FetchCaseAnalysisUseCase } from "@/domain/crm/application/use-cases/case-analysis/fetch-case-analysis";
+import { DeleteCaseAnalysisUseCase } from "@/domain/crm/application/use-cases/case-analysis/delete-case-analysis";
+
 
 @Module({
   imports: [DatabaseModule, CryptographyModule, CaslModule],
@@ -104,6 +111,8 @@ import { GetCaseAnalysisUseCase } from "@/domain/crm/application/use-cases/case-
     DeleteAISessionController,
     CreateCaseAnalysisController,
     GetCaseAnalysisController,
+    DeleteCaseAnalysisController,
+    FetchCaseAnalysisController,
   ],
   providers: [
     RegisterAdminUseCase,
@@ -135,6 +144,8 @@ import { GetCaseAnalysisUseCase } from "@/domain/crm/application/use-cases/case-
     DeleteAISessionUseCase,
     CreateCaseAnalysisUseCase,
     GetCaseAnalysisUseCase,
+    DeleteCaseAnalysisUseCase,
+    FetchCaseAnalysisUseCase,
   ],
 })
 export class HttpModule {}
