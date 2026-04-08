@@ -1,12 +1,12 @@
-import { EditAiSessionUseCase } from "@/domain/crm/application/use-cases/ai-session/edit-ai-session";
+import { EditAISessionUseCase } from "@/domain/crm/application/use-cases/ai-session/edit-ai-session";
 import { AISessionNotFoundError } from "@/domain/crm/application/use-cases/errors/ai-session-not-found-error";
 import { StatusEnum } from "@/domain/crm/enterprise/entities/value-objects/status";
 import { ZodValidationPipe } from "@/infra/http/pipes/zod-validation-pipe";
-import { Body, ConflictException, Controller, HttpCode, Inject, InternalServerErrorException, Put } from "@nestjs/common";
+import { Body, Controller, HttpCode, Inject, InternalServerErrorException, NotFoundException, Put } from "@nestjs/common";
 import { ApiBody, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { z }from "zod";
 
-const editAiSessionBodySchema = z.object({
+const editAISessionBodySchema = z.object({
     id: z.uuid(),
     status: z.enum(StatusEnum),
     chatState: z.array(z.object({
@@ -17,14 +17,14 @@ const editAiSessionBodySchema = z.object({
     isThirdParty: z.boolean(),
 })
 
-type EditAISessionBodySchema = z.infer<typeof editAiSessionBodySchema>;
+type EditAISessionBodySchema = z.infer<typeof editAISessionBodySchema>;
 
 @ApiTags("AI Session")
 @Controller("/ai-sessions/:id")
 export class EditAISessionController {
     constructor(
-        @Inject(EditAiSessionUseCase)
-        private editAiSession: EditAiSessionUseCase
+        @Inject(EditAISessionUseCase)
+        private editAISession: EditAISessionUseCase
     ) {}
 
     @Put()
@@ -51,10 +51,10 @@ export class EditAISessionController {
         status: 404,
         description: "AI session not found",
     })
-    async handle(@Body(new ZodValidationPipe(editAiSessionBodySchema)) body: EditAISessionBodySchema){
+    async handle(@Body(new ZodValidationPipe(editAISessionBodySchema)) body: EditAISessionBodySchema){
         const { id, status, chatState, name, cellphone, isThirdParty } = body;
 
-        const result = await this.editAiSession.execute({
+        const result = await this.editAISession.execute({
             id,
             status,
             chatState,
@@ -68,7 +68,7 @@ export class EditAISessionController {
         
             switch (error.constructor) {
                 case AISessionNotFoundError:
-                    throw new ConflictException(error.message);
+                    throw new NotFoundException(error.message);
                 default:
                     throw new InternalServerErrorException(error.message);
             }

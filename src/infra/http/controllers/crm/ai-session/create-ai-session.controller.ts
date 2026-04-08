@@ -19,7 +19,7 @@ type CreateAISessionBodySchema = z.infer<typeof createAISessionBodySchema>;
 export class CreateAISessionController {
     constructor(
         @Inject(CreateAISessionUseCase)
-        private createAiSession: CreateAISessionUseCase
+        private createAISession: CreateAISessionUseCase
     ) {}
 
     @Post()
@@ -46,7 +46,7 @@ export class CreateAISessionController {
     async handle(@Body(new ZodValidationPipe(createAISessionBodySchema)) body: CreateAISessionBodySchema){
         const { chatId, name, cellphone } = body;
 
-        const result = await this.createAiSession.execute({
+        const result = await this.createAISession.execute({
             chatId,
             name,
             cellphone,
