@@ -41,6 +41,17 @@ export class Account extends Entity<AccountProps> {
     return this.props.createdAt;
   }
 
+  update(data: {
+      name?: string
+      email?: string
+    }) {
+      if (data.name) 
+          this.props.name = data.name
+
+      if (data.email) 
+          this.props.email = data.email
+    }
+
   static create(
     props: Optional<AccountProps, "createdAt">,
     id?: UniqueEntityID

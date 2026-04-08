@@ -9,4 +9,5 @@ export abstract class AccountsRepository {
     params: PaginationParams
   ): Promise<PaginatedResult<Account>>;
   abstract create(account: Account): Promise<void>;
+  abstract save(account: Account): Promise<void>;
 }
