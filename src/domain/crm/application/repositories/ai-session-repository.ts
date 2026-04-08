@@ -6,4 +6,5 @@ export abstract class AISessionRepository {
     abstract findAll(): Promise<AISession[]>;
     abstract update(aiSession: AISession): Promise<void>;
     abstract delete(aiSession: AISession): Promise<void>;
+    abstract findActiveSessionByChatId(chatId: string): Promise<AISession | null>;
 }
