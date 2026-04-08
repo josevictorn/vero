@@ -60,7 +60,7 @@ import { CreateAISessionController } from "./controllers/crm/ai-session/create-a
 
 import { CreateAISessionUseCase } from "@/domain/crm/application/use-cases/ai-session/create-ai-session";
 import { EditAISessionController } from "./controllers/crm/ai-session/edit-ai-session.controller";
-import { EditAiSessionUseCase } from "@/domain/crm/application/use-cases/ai-session/edit-ai-session";
+import { EditAISessionUseCase } from "@/domain/crm/application/use-cases/ai-session/edit-ai-session";
 import { GetAISessionController } from "./controllers/crm/ai-session/get-ai-session.controller";
 import { GetAISessionUseCase } from "@/domain/crm/application/use-cases/ai-session/get-ai-session";
 import { FetchAISessionController } from "./controllers/crm/ai-session/fetch-ai-session.controller";
@@ -123,7 +123,7 @@ import { DeleteAISessionUseCase } from "@/domain/crm/application/use-cases/ai-se
     EditLeadUseCase,
     DeleteLeadUseCase,
     CreateAISessionUseCase,
-    EditAiSessionUseCase,
+    EditAISessionUseCase,
     GetAISessionUseCase,
     FetchAISessionsUseCase,
     DeleteAISessionUseCase,

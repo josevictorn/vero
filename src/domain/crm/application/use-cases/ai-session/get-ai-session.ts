@@ -4,11 +4,11 @@ import { Inject, Injectable } from "@nestjs/common";
 import { AISessionRepository } from "../../repositories/ai-session-repository";
 import { AISessionNotFoundError } from "../errors/ai-session-not-found-error";
 
-interface GetAiSessionUseCaseRequest {
+interface GetAISessionUseCaseRequest {
     id: string;
 }
 
-type GetAiSessionUseCaseResponse = Either<Error, { aiSession: AISession }>;
+type GetAISessionUseCaseResponse = Either<Error, { aiSession: AISession }>;
 
 @Injectable()
 export class GetAISessionUseCase {
@@ -17,7 +17,7 @@ export class GetAISessionUseCase {
         private aiSessionRepository: AISessionRepository
     ) {}
 
-    async execute(request: GetAiSessionUseCaseRequest): Promise<GetAiSessionUseCaseResponse> {
+    async execute(request: GetAISessionUseCaseRequest): Promise<GetAISessionUseCaseResponse> {
         const aiSession = await this.aiSessionRepository.findById(request.id);
 
         if (!aiSession) {

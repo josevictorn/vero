@@ -6,7 +6,7 @@ import { AISessionNotFoundError } from "../errors/ai-session-not-found-error";
 import { Inject, Injectable } from "@nestjs/common";
 
 
-interface EditAiSessionUseCaseRequest {
+interface EditAISessionUseCaseRequest {
     id: string;
     status: StatusEnum;
     chatState: ChatState[];
@@ -15,16 +15,16 @@ interface EditAiSessionUseCaseRequest {
     isThirdParty: boolean;
 }
 
-type EditAiSessionUseCaseResponse = Either<Error, { aiSession: AISession }>;
+type EditAISessionUseCaseResponse = Either<Error, { aiSession: AISession }>;
 
 @Injectable()
-export class EditAiSessionUseCase {
+export class EditAISessionUseCase {
     constructor(
         @Inject(AISessionRepository)
         private aiSessionRepository: AISessionRepository
     ) {}
 
-    async execute(request: EditAiSessionUseCaseRequest): Promise<EditAiSessionUseCaseResponse> {
+    async execute(request: EditAISessionUseCaseRequest): Promise<EditAISessionUseCaseResponse> {
         const aiSession = await this.aiSessionRepository.findById(request.id);
 
         if (!aiSession) {
