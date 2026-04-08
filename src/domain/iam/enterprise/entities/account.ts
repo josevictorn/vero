@@ -41,6 +41,10 @@ export class Account extends Entity<AccountProps> {
     return this.props.createdAt;
   }
 
+  updatePassword(newPassword: string) {
+    this.props.password = newPassword;
+  }
+
   update(data: {
       name?: string
       email?: string
