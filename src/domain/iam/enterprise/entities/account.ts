@@ -17,8 +17,16 @@ export class Account extends Entity<AccountProps> {
     return this.props.name;
   }
 
+  set name(name: string) {
+    this.props.name = name;
+  }
+
   get email() {
     return this.props.email;
+  }
+
+  set email(email: string) {
+    this.props.email = email;
   }
 
   get role() {
@@ -40,21 +48,6 @@ export class Account extends Entity<AccountProps> {
   get createdAt() {
     return this.props.createdAt;
   }
-
-  updatePassword(newPassword: string) {
-    this.props.password = newPassword;
-  }
-
-  update(data: {
-      name?: string
-      email?: string
-    }) {
-      if (data.name) 
-          this.props.name = data.name
-
-      if (data.email) 
-          this.props.email = data.email
-    }
 
   static create(
     props: Optional<AccountProps, "createdAt">,
