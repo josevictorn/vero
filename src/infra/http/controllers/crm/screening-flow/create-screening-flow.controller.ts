@@ -28,7 +28,7 @@ export class CreateScreeningFlowController {
         caseType: { type: "string", example: "Trabalhista" },
         questions: {
           type: "array",
-          example: [{ text: "Trabalhava aos domingos?", type: "boolean" }],
+          example: [{ question: "Trabalhava aos domingos?", type: "boolean" }],
         },
       },
       required: ["caseType", "questions"],

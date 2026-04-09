@@ -9,7 +9,7 @@ export interface ChatState {
 }
 
 export interface AISessionProps {
-    screeningFlowId: string;
+    screeningFlowId: string | null;
     chatId: string;
     status: string;
     chatState: ChatState[];
@@ -77,7 +77,7 @@ export class AISession extends Entity<AISessionProps> {
             {
                 ...props,
                 chatState: props.chatState ?? [],
-                screeningFlowId: props.screeningFlowId ?? "",
+                screeningFlowId: props.screeningFlowId ?? null,
                 isThirdParty: props.isThirdParty ?? false,
                 createdAt: props.createdAt ?? new Date(),
                 status: props.status ?? StatusEnum.IDENTIFYING,

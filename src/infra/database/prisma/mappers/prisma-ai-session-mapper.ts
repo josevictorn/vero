@@ -26,7 +26,7 @@ export class PrismaAISessionMapper {
             status: aiSession.status,
             name: aiSession.name,
             cellphone: aiSession.cellphone,
-            screeningFlowId: aiSession.screeningFlowId,
+            screeningFlowId: aiSession.screeningFlowId || null,
             isThirdParty: aiSession.isThirdParty,
         };
     }
