@@ -99,7 +99,7 @@ model AiSession {
   isThirdParty    Boolean  @default(false) @map("is_third_party")
   createdAt       DateTime @default(now()) @map("created_at")
 
-  screeningFlow ScreeningFlow  @relation(fields: [screeningFlowId], references: [id], onDelete: Cascade)
+  screeningFlow ScreeningFlow?  @relation(fields: [screeningFlowId], references: [id], onDelete: Cascade)
   caseAnalyses  CaseAnalysis[]
 
   @@map("ai_sessions")
