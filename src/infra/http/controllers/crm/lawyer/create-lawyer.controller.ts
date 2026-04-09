@@ -27,8 +27,8 @@ export class CreateLawyerController {
     schema: {
       type: "object",
       properties: {
-        userId: { type: "string", format: "uuid" },
-        cellphone: { type: "string" },
+        userId: { type: "string", format: "uuid", example: "123e4567-e89b-12d3-a456-426614174000" },
+        cellphone: { type: "string", example: "11999999999" },
       },
       required: ["userId", "cellphone"],
     },
@@ -56,5 +56,17 @@ export class CreateLawyerController {
           throw new InternalServerErrorException(error.message);
       }
     }
+
+    const { lawyer } = result.value;
+
+    return {
+      lawyer: {
+        id: lawyer.id.toString(),
+        userId: lawyer.userId,
+        workspaceId: lawyer.workspaceId,
+        cellphone: lawyer.cellphone,
+        createdAt: lawyer.createdAt,
+      },
+    };
   }
 }
