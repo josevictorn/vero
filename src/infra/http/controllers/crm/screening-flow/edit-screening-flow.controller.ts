@@ -5,6 +5,12 @@ import { ApiBody, ApiResponse, ApiTags, ApiParam } from "@nestjs/swagger";
 import { z } from "zod";
 import { ZodValidationPipe } from "../../../pipes/zod-validation-pipe";
 
+const editScreeningFlowParamsSchema = z.object({
+  id: z.uuid(),
+});
+
+type EditScreeningFlowParamsSchema = z.infer<typeof editScreeningFlowParamsSchema>;
+
 const editScreeningFlowBodySchema = z.object({
   caseType: z.string(),
   questions: z.array(z.object({ question: z.string() }).loose()),
@@ -22,22 +28,27 @@ export class EditScreeningFlowController {
 
   @Put("/:id")
   @HttpCode(200)
-  @ApiParam({ name: "id", type: "string" })
+  @ApiParam({ name: "id", type: "string", example: "123e4567-e89b-12d3-a456-426614174000" })
   @ApiBody({
     schema: {
       type: "object",
       properties: {
-        caseType: { type: "string" },
-        questions: { type: "array" },
+        caseType: { type: "string", example: "Trabalhista" },
+        questions: {
+          type: "array",
+          example: [{ question: "Trabalhava aos domingos?", type: "boolean" }],
+        },
       },
+      required: ["caseType", "questions"],
     },
   })
   @ApiResponse({ status: 200, description: "Screening flow updated successfully" })
   @ApiResponse({ status: 404, description: "Screening flow not found" })
   async handle(
-    @Param("id") id: string,
-    @Body(new ZodValidationPipe(editScreeningFlowBodySchema)) body: EditScreeningFlowBodySchema
+    @Param(new ZodValidationPipe(editScreeningFlowParamsSchema)) params: EditScreeningFlowParamsSchema,
+    @Body(new ZodValidationPipe(editScreeningFlowBodySchema)) body: EditScreeningFlowBodySchema,
   ) {
+    const { id } = params;
     const { caseType, questions } = body;
 
     const result = await this.editScreeningFlow.execute({
