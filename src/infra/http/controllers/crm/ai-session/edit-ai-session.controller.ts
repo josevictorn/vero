@@ -2,12 +2,17 @@ import { EditAISessionUseCase } from "@/domain/crm/application/use-cases/ai-sess
 import { AISessionNotFoundError } from "@/domain/crm/application/use-cases/errors/ai-session-not-found-error";
 import { StatusEnum } from "@/domain/crm/enterprise/entities/value-objects/status";
 import { ZodValidationPipe } from "@/infra/http/pipes/zod-validation-pipe";
-import { Body, Controller, HttpCode, Inject, InternalServerErrorException, NotFoundException, Put } from "@nestjs/common";
-import { ApiBody, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { Body, Controller, HttpCode, Inject, InternalServerErrorException, NotFoundException, Param, Put } from "@nestjs/common";
+import { ApiBody, ApiParam, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { z }from "zod";
 
-const editAISessionBodySchema = z.object({
+const editAISessionParamsSchema = z.object({
     id: z.uuid(),
+});
+
+type EditAISessionParamsSchema = z.infer<typeof editAISessionParamsSchema>;
+
+const editAISessionBodySchema = z.object({
     status: z.enum(StatusEnum),
     chatState: z.array(z.object({
         information: z.string(),
@@ -29,18 +34,18 @@ export class EditAISessionController {
 
     @Put()
     @HttpCode(200)
+    @ApiParam({ name: "id", type: "string", example: "123e4567-e89b-12d3-a456-426614174000" })
     @ApiBody({
         schema: {
             type: "object",
             properties: {
-                id: { type: "uuid", example: "{id}" },
-                status: { type: "string", enum: Object.values(StatusEnum) },
-                chatState: { type: "array", items: { type: "object", properties: { information: { type: "string" } } } },
-                name: { type: "string", example: "fulano" },
+                status: { type: "string", enum: Object.values(StatusEnum), example: "IDENTIFYING" },
+                chatState: { type: "array", items: { type: "object", properties: { information: { type: "string" } } }, example: [{ information: "Cliente trabalhou 5 anos na empresa" }] },
+                name: { type: "string", example: "Fulano de Tal" },
                 cellphone: { type: "string", example: "84994082362" },
                 isThirdParty: { type: "boolean", example: false },
             },
-            required: ["id", "status", "chatState", "name", "cellphone", "isThirdParty"],
+            required: ["status", "chatState", "name", "cellphone", "isThirdParty"],
         },
     })
     @ApiResponse({
@@ -51,8 +56,12 @@ export class EditAISessionController {
         status: 404,
         description: "AI session not found",
     })
-    async handle(@Body(new ZodValidationPipe(editAISessionBodySchema)) body: EditAISessionBodySchema){
-        const { id, status, chatState, name, cellphone, isThirdParty } = body;
+    async handle(
+        @Param(new ZodValidationPipe(editAISessionParamsSchema)) params: EditAISessionParamsSchema,
+        @Body(new ZodValidationPipe(editAISessionBodySchema)) body: EditAISessionBodySchema,
+    ){
+        const { id } = params;
+        const { status, chatState, name, cellphone, isThirdParty } = body;
 
         const result = await this.editAISession.execute({
             id,
