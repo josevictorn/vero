@@ -1,9 +1,15 @@
 import { EditLawyerUseCase } from "@/domain/crm/application/use-cases/lawyer/edit-lawyer";
 import { LawyerNotFoundError } from "@/domain/crm/application/use-cases/errors/lawyer-not-found-error";
 import { Body, Controller, HttpCode, Inject, Param, Put, NotFoundException, InternalServerErrorException } from "@nestjs/common";
-import { ApiBody, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { ApiBody, ApiParam, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { z } from "zod";
 import { ZodValidationPipe } from "../../../pipes/zod-validation-pipe";
+
+const editLawyerParamsSchema = z.object({
+  id: z.uuid(),
+});
+
+type EditLawyerParamsSchema = z.infer<typeof editLawyerParamsSchema>;
 
 const editLawyerBodySchema = z.object({
   cellphone: z.string(),
@@ -21,17 +27,23 @@ export class EditLawyerController {
 
   @Put()
   @HttpCode(200)
+  @ApiParam({ name: "id", type: "string", example: "123e4567-e89b-12d3-a456-426614174000" })
   @ApiBody({
     schema: {
       type: "object",
       properties: {
-        cellphone: { type: "string" },
+        cellphone: { type: "string", example: "11999999999" },
       },
+      required: ["cellphone"],
     },
   })
   @ApiResponse({ status: 200, description: "Lawyer updated successfully" })
   @ApiResponse({ status: 404, description: "Lawyer not found" })
-  async handle(@Param("id") id: string, @Body(new ZodValidationPipe(editLawyerBodySchema)) body: EditLawyerBodySchema) {
+  async handle(
+    @Param(new ZodValidationPipe(editLawyerParamsSchema)) params: EditLawyerParamsSchema,
+    @Body(new ZodValidationPipe(editLawyerBodySchema)) body: EditLawyerBodySchema,
+  ) {
+    const { id } = params;
     const { cellphone } = body;
 
     const result = await this.editLawyer.execute({
@@ -49,5 +61,17 @@ export class EditLawyerController {
           throw new InternalServerErrorException(error.message);
       }
     }
+
+    const { lawyer } = result.value;
+
+    return {
+      lawyer: {
+        id: lawyer.id.toString(),
+        userId: lawyer.userId,
+        workspaceId: lawyer.workspaceId,
+        cellphone: lawyer.cellphone,
+        createdAt: lawyer.createdAt,
+      },
+    };
   }
 }
