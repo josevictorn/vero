@@ -73,13 +73,14 @@ import { GetCaseAnalysisController } from "./controllers/crm/case-analysis/get-c
 import { FetchCaseAnalysisController } from "./controllers/crm/case-analysis/fetch-case-analysis.controller";
 import { DeleteCaseAnalysisController } from "./controllers/crm/case-analysis/delete-case-analysis.controller";
 import { EditCaseAnalysisController } from "./controllers/crm/case-analysis/edit-case-analysis.controller";
+import { GetByAISessionCaseAnalysisController } from "./controllers/crm/case-analysis/get-by-ai-session-case-analysis.controller";
 
 import { CreateCaseAnalysisUseCase } from "@/domain/crm/application/use-cases/case-analysis/create-case-analysis";
 import { GetCaseAnalysisUseCase } from "@/domain/crm/application/use-cases/case-analysis/get-case-analysis";
 import { FetchCaseAnalysisUseCase } from "@/domain/crm/application/use-cases/case-analysis/fetch-case-analysis";
 import { DeleteCaseAnalysisUseCase } from "@/domain/crm/application/use-cases/case-analysis/delete-case-analysis";
 import { EditCaseAnalysisUseCase } from "@/domain/crm/application/use-cases/case-analysis/edit-case-analysis";
-
+import { GetByAISessionCaseAnalysisUseCase } from "@/domain/crm/application/use-cases/case-analysis/get-by-ai-session-case-analysis";
 
 @Module({
   imports: [DatabaseModule, CryptographyModule, CaslModule],
@@ -116,6 +117,7 @@ import { EditCaseAnalysisUseCase } from "@/domain/crm/application/use-cases/case
     DeleteCaseAnalysisController,
     FetchCaseAnalysisController,
     EditCaseAnalysisController,
+    GetByAISessionCaseAnalysisController,
   ],
   providers: [
     RegisterAdminUseCase,
@@ -150,6 +152,7 @@ import { EditCaseAnalysisUseCase } from "@/domain/crm/application/use-cases/case
     DeleteCaseAnalysisUseCase,
     FetchCaseAnalysisUseCase,
     EditCaseAnalysisUseCase,
+    GetByAISessionCaseAnalysisUseCase,
   ],
 })
 export class HttpModule {}
