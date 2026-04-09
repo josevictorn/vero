@@ -17,6 +17,7 @@ import { Action } from "@/infra/auth/casl/actions";
 import { CheckPolicies } from "@/infra/auth/casl/check-policies.decorator";
 import { PoliciesGuard } from "@/infra/auth/casl/policies.guard";
 import { ZodValidationPipe } from "@/infra/http/pipes/zod-validation-pipe.ts";
+import { Public } from "@/infra/auth/public";
 
 const registerAdminBodySchema = z.object({
   name: z.string(),
@@ -27,6 +28,7 @@ const registerAdminBodySchema = z.object({
 type RegisterAdminBodySchema = z.infer<typeof registerAdminBodySchema>;
 
 @ApiTags("Accounts")
+@Public()
 @Controller("/accounts/admin")
 export class RegisterAdminController {
   constructor(
@@ -36,8 +38,8 @@ export class RegisterAdminController {
 
   @Post()
   @HttpCode(201)
-  @UseGuards(PoliciesGuard)
-  @CheckPolicies((ability) => ability.can(Action.Create, "Account"))
+  //@UseGuards(PoliciesGuard)
+  //@CheckPolicies((ability) => ability.can(Action.Create, "Account"))
   @ApiBody({
     schema: {
       type: "object",

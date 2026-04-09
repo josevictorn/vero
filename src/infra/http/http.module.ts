@@ -4,14 +4,83 @@ import { FetchAccountsUseCase } from "@/domain/iam/application/use-cases/fetch-a
 import { GetUserProfileUseCase } from "@/domain/iam/application/use-cases/get-user-profile";
 import { RegisterAccountUseCase } from "@/domain/iam/application/use-cases/register-account";
 import { RegisterAdminUseCase } from "@/domain/iam/application/use-cases/register-admin.ts";
+
+import { CreateScreeningFlowUseCase } from "@/domain/crm/application/use-cases/screening-flow/create-screening-flow";
+import { GetScreeningFlowUseCase } from "@/domain/crm/application/use-cases/screening-flow/get-screening-flow";
+import { FetchScreeningFlowsUseCase } from "@/domain/crm/application/use-cases/screening-flow/fetch-screening-flows";
+import { EditScreeningFlowUseCase } from "@/domain/crm/application/use-cases/screening-flow/edit-screening-flow";
+import { DeleteScreeningFlowUseCase } from "@/domain/crm/application/use-cases/screening-flow/delete-screening-flow";
+
 import { CryptographyModule } from "@/infra/cryptography/cryptography.module.ts";
 import { DatabaseModule } from "@/infra/database/database.module.ts";
-import { RegisterAdminController } from "@/infra/http/controllers/iam/register-admin.controller.ts";
 import { CaslModule } from "../auth/casl/casl.module";
+
+import { RegisterAdminController } from "@/infra/http/controllers/iam/register-admin.controller.ts";
 import { AuthenticateController } from "./controllers/iam/authenticate.controller";
 import { FetchAccountsController } from "./controllers/iam/fetch-accounts";
 import { GetUserProfileController } from "./controllers/iam/get-user-profile.controller";
 import { RegisterAccountController } from "./controllers/iam/register-account.controller";
+
+import { CreateScreeningFlowController } from "./controllers/crm/screening-flow/create-screening-flow.controller";
+import { GetScreeningFlowController } from "./controllers/crm/screening-flow/get-screening-flow.controller";
+import { FetchScreeningFlowsController } from "./controllers/crm/screening-flow/fetch-screening-flows.controller";
+import { EditScreeningFlowController } from "./controllers/crm/screening-flow/edit-screening-flow.controller";
+import { DeleteScreeningFlowController } from "./controllers/crm/screening-flow/delete-screening-flow.controller";
+
+import { GetWorkspaceUseCase } from "@/domain/crm/application/use-cases/workspace/get-workspace";
+import { EditWorkspaceUseCase } from "@/domain/crm/application/use-cases/workspace/edit-workspace";
+import { GetWorkspaceController } from "./controllers/crm/workspace/get-workspace.controller";
+import { EditWorkspaceController } from "./controllers/crm/workspace/edit-workspace.controller";
+
+import { CreateLawyerController } from "./controllers/crm/lawyer/create-lawyer.controller";
+import { GetLawyerController } from "./controllers/crm/lawyer/get-lawyer.controller";
+import { FetchLawyersController } from "./controllers/crm/lawyer/fetch-lawyers.controller";
+import { EditLawyerController } from "./controllers/crm/lawyer/edit-lawyer.controller";
+import { DeleteLawyerController } from "./controllers/crm/lawyer/delete-lawyer.controller";
+
+import { CreateLawyerUseCase } from "@/domain/crm/application/use-cases/lawyer/create-lawyer";
+import { GetLawyerUseCase } from "@/domain/crm/application/use-cases/lawyer/get-lawyer";
+import { FetchLawyersUseCase } from "@/domain/crm/application/use-cases/lawyer/fetch-lawyers";
+import { EditLawyerUseCase } from "@/domain/crm/application/use-cases/lawyer/edit-lawyer";
+import { DeleteLawyerUseCase } from "@/domain/crm/application/use-cases/lawyer/delete-lawyer";
+
+import { CreateLeadController } from "./controllers/crm/lead/create-lead.controller";
+import { GetLeadController } from "./controllers/crm/lead/get-lead.controller";
+import { FetchLeadsController } from "./controllers/crm/lead/fetch-leads.controller";
+import { EditLeadController } from "./controllers/crm/lead/edit-lead.controller";
+import { DeleteLeadController } from "./controllers/crm/lead/delete-lead.controller";
+
+import { CreateLeadUseCase } from "@/domain/crm/application/use-cases/lead/create-lead";
+import { GetLeadUseCase } from "@/domain/crm/application/use-cases/lead/get-lead";
+import { FetchLeadsUseCase } from "@/domain/crm/application/use-cases/lead/fetch-leads";
+import { EditLeadUseCase } from "@/domain/crm/application/use-cases/lead/edit-lead";
+import { DeleteLeadUseCase } from "@/domain/crm/application/use-cases/lead/delete-lead";
+
+import { CreateAISessionController } from "./controllers/crm/ai-session/create-ai-session.controller";
+import { EditAISessionController } from "./controllers/crm/ai-session/edit-ai-session.controller";
+import { GetAISessionController } from "./controllers/crm/ai-session/get-ai-session.controller";
+import { FetchAISessionController } from "./controllers/crm/ai-session/fetch-ai-session.controller";
+import { DeleteAISessionController } from "./controllers/crm/ai-session/delete-ai-session.controller";
+
+import { CreateAISessionUseCase } from "@/domain/crm/application/use-cases/ai-session/create-ai-session";
+import { EditAISessionUseCase } from "@/domain/crm/application/use-cases/ai-session/edit-ai-session";
+import { GetAISessionUseCase } from "@/domain/crm/application/use-cases/ai-session/get-ai-session";
+import { FetchAISessionsUseCase } from "@/domain/crm/application/use-cases/ai-session/fetch-ai-sessions";
+import { DeleteAISessionUseCase } from "@/domain/crm/application/use-cases/ai-session/delete-ai-session";
+
+import { CreateCaseAnalysisController } from "./controllers/crm/case-analysis/create-case-analysis.controller";
+import { GetCaseAnalysisController } from "./controllers/crm/case-analysis/get-case-analysis.controller";
+import { FetchCaseAnalysisController } from "./controllers/crm/case-analysis/fetch-case-analysis.controller";
+import { DeleteCaseAnalysisController } from "./controllers/crm/case-analysis/delete-case-analysis.controller";
+import { EditCaseAnalysisController } from "./controllers/crm/case-analysis/edit-case-analysis.controller";
+import { GetByAISessionCaseAnalysisController } from "./controllers/crm/case-analysis/get-by-ai-session-case-analysis.controller";
+
+import { CreateCaseAnalysisUseCase } from "@/domain/crm/application/use-cases/case-analysis/create-case-analysis";
+import { GetCaseAnalysisUseCase } from "@/domain/crm/application/use-cases/case-analysis/get-case-analysis";
+import { FetchCaseAnalysisUseCase } from "@/domain/crm/application/use-cases/case-analysis/fetch-case-analysis";
+import { DeleteCaseAnalysisUseCase } from "@/domain/crm/application/use-cases/case-analysis/delete-case-analysis";
+import { EditCaseAnalysisUseCase } from "@/domain/crm/application/use-cases/case-analysis/edit-case-analysis";
+import { GetByAISessionCaseAnalysisUseCase } from "@/domain/crm/application/use-cases/case-analysis/get-by-ai-session-case-analysis";
 
 @Module({
   imports: [DatabaseModule, CryptographyModule, CaslModule],
@@ -21,6 +90,34 @@ import { RegisterAccountController } from "./controllers/iam/register-account.co
     RegisterAccountController,
     GetUserProfileController,
     FetchAccountsController,
+    CreateScreeningFlowController,
+    GetScreeningFlowController,
+    FetchScreeningFlowsController,
+    EditScreeningFlowController,
+    DeleteScreeningFlowController,
+    GetWorkspaceController,
+    EditWorkspaceController,
+    CreateLawyerController,
+    GetLawyerController,
+    FetchLawyersController,
+    EditLawyerController,
+    DeleteLawyerController,
+    CreateLeadController,
+    GetLeadController,
+    FetchLeadsController,
+    EditLeadController,
+    DeleteLeadController,
+    CreateAISessionController,
+    EditAISessionController,
+    GetAISessionController,
+    FetchAISessionController,
+    DeleteAISessionController,
+    CreateCaseAnalysisController,
+    GetCaseAnalysisController,
+    DeleteCaseAnalysisController,
+    FetchCaseAnalysisController,
+    EditCaseAnalysisController,
+    GetByAISessionCaseAnalysisController,
   ],
   providers: [
     RegisterAdminUseCase,
@@ -28,6 +125,34 @@ import { RegisterAccountController } from "./controllers/iam/register-account.co
     RegisterAccountUseCase,
     GetUserProfileUseCase,
     FetchAccountsUseCase,
+    CreateScreeningFlowUseCase,
+    GetScreeningFlowUseCase,
+    FetchScreeningFlowsUseCase,
+    EditScreeningFlowUseCase,
+    DeleteScreeningFlowUseCase,
+    GetWorkspaceUseCase,
+    EditWorkspaceUseCase,
+    CreateLawyerUseCase,
+    GetLawyerUseCase,
+    FetchLawyersUseCase,
+    EditLawyerUseCase,
+    DeleteLawyerUseCase,
+    CreateLeadUseCase,
+    GetLeadUseCase,
+    FetchLeadsUseCase,
+    EditLeadUseCase,
+    DeleteLeadUseCase,
+    CreateAISessionUseCase,
+    EditAISessionUseCase,
+    GetAISessionUseCase,
+    FetchAISessionsUseCase,
+    DeleteAISessionUseCase,
+    CreateCaseAnalysisUseCase,
+    GetCaseAnalysisUseCase,
+    DeleteCaseAnalysisUseCase,
+    FetchCaseAnalysisUseCase,
+    EditCaseAnalysisUseCase,
+    GetByAISessionCaseAnalysisUseCase,
   ],
 })
 export class HttpModule {}
