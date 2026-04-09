@@ -15,10 +15,10 @@ import { z } from "zod";
 import { ZodValidationPipe } from "../../../pipes/zod-validation-pipe";
 
 const createLeadBodySchema = z.object({
-  lawyerId: z.string().uuid().optional().nullable(),
+  lawyerId: z.uuid().optional().nullable(),
   name: z.string(),
   cellphone: z.string(),
-  email: z.string().email(),
+  email: z.email(),
 });
 
 type CreateLeadBodySchema = z.infer<typeof createLeadBodySchema>;
@@ -37,10 +37,10 @@ export class CreateLeadController {
     schema: {
       type: "object",
       properties: {
-        lawyerId: { type: "string", format: "uuid", nullable: true },
-        name: { type: "string" },
-        cellphone: { type: "string" },
-        email: { type: "string", format: "email" },
+        lawyerId: { type: "string", format: "uuid", nullable: true, example: "123e4567-e89b-12d3-a456-426614174000" },
+        name: { type: "string", example: "João da Silva" },
+        cellphone: { type: "string", example: "11999999999" },
+        email: { type: "string", format: "email", example: "joao@email.com" },
       },
       required: ["name", "cellphone", "email"],
     },
@@ -69,5 +69,19 @@ export class CreateLeadController {
           throw new InternalServerErrorException(error.message);
       }
     }
+
+    const { lead } = result.value;
+
+    return {
+      lead: {
+        id: lead.id.toString(),
+        workspaceId: lead.workspaceId,
+        lawyerId: lead.lawyerId,
+        name: lead.name,
+        cellphone: lead.cellphone,
+        email: lead.email,
+        createdAt: lead.createdAt,
+      },
+    };
   }
 }
