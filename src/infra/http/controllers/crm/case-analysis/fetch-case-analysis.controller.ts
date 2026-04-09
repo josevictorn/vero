@@ -1,8 +1,8 @@
 import { FetchCaseAnalysisUseCase } from "@/domain/crm/application/use-cases/case-analysis/fetch-case-analysis";
 import { Controller, Get, HttpCode, Inject, InternalServerErrorException } from "@nestjs/common";
-import { ApiResponse } from "@nestjs/swagger";
+import { ApiResponse, ApiTags } from "@nestjs/swagger";
 
-
+@ApiTags("Case Analysis")
 @Controller("/case-analyses")
 export class FetchCaseAnalysisController {
     constructor(

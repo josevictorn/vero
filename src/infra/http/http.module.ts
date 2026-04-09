@@ -72,11 +72,13 @@ import { CreateCaseAnalysisController } from "./controllers/crm/case-analysis/cr
 import { GetCaseAnalysisController } from "./controllers/crm/case-analysis/get-case-analysis.controller";
 import { FetchCaseAnalysisController } from "./controllers/crm/case-analysis/fetch-case-analysis.controller";
 import { DeleteCaseAnalysisController } from "./controllers/crm/case-analysis/delete-case-analysis.controller";
+import { EditCaseAnalysisController } from "./controllers/crm/case-analysis/edit-case-analysis.controller";
 
 import { CreateCaseAnalysisUseCase } from "@/domain/crm/application/use-cases/case-analysis/create-case-analysis";
 import { GetCaseAnalysisUseCase } from "@/domain/crm/application/use-cases/case-analysis/get-case-analysis";
 import { FetchCaseAnalysisUseCase } from "@/domain/crm/application/use-cases/case-analysis/fetch-case-analysis";
 import { DeleteCaseAnalysisUseCase } from "@/domain/crm/application/use-cases/case-analysis/delete-case-analysis";
+import { EditCaseAnalysisUseCase } from "@/domain/crm/application/use-cases/case-analysis/edit-case-analysis";
 
 
 @Module({
@@ -113,6 +115,7 @@ import { DeleteCaseAnalysisUseCase } from "@/domain/crm/application/use-cases/ca
     GetCaseAnalysisController,
     DeleteCaseAnalysisController,
     FetchCaseAnalysisController,
+    EditCaseAnalysisController,
   ],
   providers: [
     RegisterAdminUseCase,
@@ -146,6 +149,7 @@ import { DeleteCaseAnalysisUseCase } from "@/domain/crm/application/use-cases/ca
     GetCaseAnalysisUseCase,
     DeleteCaseAnalysisUseCase,
     FetchCaseAnalysisUseCase,
+    EditCaseAnalysisUseCase,
   ],
 })
 export class HttpModule {}
