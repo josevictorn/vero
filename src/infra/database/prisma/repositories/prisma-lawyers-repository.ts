@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Inject, Injectable } from "@nestjs/common";
 import { PrismaService } from "../prisma.service";
 import { Lawyer } from "@/domain/crm/enterprise/entities/lawyer";
 import { LawyersRepository } from "@/domain/crm/application/repositories/lawyers-repository";
@@ -6,7 +6,7 @@ import { PrismaLawyerMapper } from "../mappers/prisma-lawyer-mapper";
 
 @Injectable()
 export class PrismaLawyersRepository implements LawyersRepository {
-  constructor(private prisma: PrismaService) {}
+  constructor(@Inject(PrismaService) private readonly prisma: PrismaService) {}
 
   async create(lawyer: Lawyer): Promise<void> {
     const data = PrismaLawyerMapper.toPrisma(lawyer);

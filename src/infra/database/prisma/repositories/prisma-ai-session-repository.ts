@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Inject, Injectable } from "@nestjs/common";
 import { PrismaService } from "../prisma.service";
 import { AISessionRepository } from "@/domain/crm/application/repositories/ai-session-repository";
 import { AISession } from "@/domain/crm/enterprise/entities/ai-session";
@@ -7,7 +7,7 @@ import { StatusEnum } from "@/domain/crm/enterprise/entities/value-objects/statu
 
 @Injectable()
 export class PrismaAISessionRepository implements AISessionRepository {
-    constructor(private prisma: PrismaService) {}
+    constructor(@Inject(PrismaService) private readonly prisma: PrismaService) {}
 
     async create(aiSession: AISession): Promise<void> {
         const data = PrismaAISessionMapper.toPrisma(aiSession);

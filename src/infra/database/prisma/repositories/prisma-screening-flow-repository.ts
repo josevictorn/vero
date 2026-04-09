@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Inject, Injectable } from "@nestjs/common";
 import { PrismaService } from "../prisma.service";
 import { ScreeningFlow } from "@/domain/crm/enterprise/entities/screening-flow";
 import { ScreeningFlowsRepository } from "@/domain/crm/application/repositories/screening-flows-repository";
@@ -6,7 +6,7 @@ import { PrismaScreeningFlowMapper } from "../mappers/prisma-screening-flow-mapp
 
 @Injectable()
 export class PrismaScreeningFlowsRepository implements ScreeningFlowsRepository {
-    constructor(private prisma: PrismaService) {}
+    constructor(@Inject(PrismaService) private readonly prisma: PrismaService) {}
 
     async create(screeningFlow: ScreeningFlow): Promise<void> {
         const data = PrismaScreeningFlowMapper.toPrisma(screeningFlow);

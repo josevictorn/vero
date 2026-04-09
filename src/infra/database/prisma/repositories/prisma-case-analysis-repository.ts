@@ -1,5 +1,5 @@
 import { CaseAnalysisRepository } from "@/domain/crm/application/repositories/case-analysis-repository";
-import { Injectable } from "@nestjs/common";
+import { Inject, Injectable } from "@nestjs/common";
 import { PrismaService } from "../prisma.service";
 import { CaseAnalysis } from "@/domain/crm/enterprise/entities/case-analysis";
 import { PrismaCaseAnalysisMapper } from "../mappers/prisma-case-analysis-mapper";
@@ -7,7 +7,7 @@ import { PrismaCaseAnalysisMapper } from "../mappers/prisma-case-analysis-mapper
 
 @Injectable()
 export class PrismaCaseAnalysisRepository implements CaseAnalysisRepository {
-    constructor(private prisma: PrismaService) {}
+    constructor(@Inject(PrismaService) private readonly prisma: PrismaService) {}
 
     async create(caseAnalysis: CaseAnalysis): Promise<void> {
         const data = PrismaCaseAnalysisMapper.toPrisma(caseAnalysis);

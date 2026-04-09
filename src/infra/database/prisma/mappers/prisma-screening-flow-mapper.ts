@@ -1,6 +1,6 @@
 import { ScreeningFlow as PrismaScreeningFlow, Prisma } from "generated/prisma/client";
 import { UniqueEntityID } from "@/core/entity/unique-entity-id.ts";
-import { ScreeningFlow } from "@/domain/crm/enterprise/entities/screening-flow";
+import { Question, ScreeningFlow } from "@/domain/crm/enterprise/entities/screening-flow";
 
 export class PrismaScreeningFlowMapper {
   static toDomain(raw: PrismaScreeningFlow): ScreeningFlow {
