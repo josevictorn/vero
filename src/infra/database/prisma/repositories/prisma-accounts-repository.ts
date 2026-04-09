@@ -59,4 +59,15 @@ export class PrismaAccountsRepository implements AccountsRepository {
       data,
     });
   }
+
+  async save(account: Account) {
+    const data = PrismaAccountMapper.toPrisma(account);
+
+    await this.prisma.user.update({
+      where: {
+        id: account.id.toString(),
+      },
+      data,
+    });
+  }
 }
