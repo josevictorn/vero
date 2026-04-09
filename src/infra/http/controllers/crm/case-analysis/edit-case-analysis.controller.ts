@@ -1,12 +1,17 @@
 import { EditCaseAnalysisUseCase } from "@/domain/crm/application/use-cases/case-analysis/edit-case-analysis";
 import { CaseAnalysisNotFoundError } from "@/domain/crm/application/use-cases/errors/case-analysis-not-found-error";
 import { ZodValidationPipe } from "@/infra/http/pipes/zod-validation-pipe";
-import { Controller, Inject, Put, HttpCode, Body, NotFoundException, InternalServerErrorException } from "@nestjs/common";
-import { ApiBody, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { Controller, Inject, Put, HttpCode, Body, Param, NotFoundException, InternalServerErrorException } from "@nestjs/common";
+import { ApiBody, ApiParam, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { z } from "zod";
 
-const editCaseAnalysisBodySchema = z.object({
+const editCaseAnalysisParamsSchema = z.object({
     id: z.uuid(),
+});
+
+type EditCaseAnalysisParamsSchema = z.infer<typeof editCaseAnalysisParamsSchema>;
+
+const editCaseAnalysisBodySchema = z.object({
     title: z.string(),
     viabilityLabel: z.string(),
     analysisText: z.string(),
@@ -26,18 +31,18 @@ export class EditCaseAnalysisController {
 
     @Put()
     @HttpCode(200)
+    @ApiParam({ name: "id", type: "string", example: "123e4567-e89b-12d3-a456-426614174000" })
     @ApiBody({
         schema: {
             type: "object",
             properties: {
-                id: { type: "string", example: "123e4567-e89b-12d3-a456-426614174000" },
-                title: { type: "string", example: "Case Analysis" },
-                viabilityLabel: { type: "string", example: "Viable" },
-                analysisText: { type: "string", example: "Analysis Text" },
-                estimatedComplexity: { type: "string", example: "Medium" },
-                mainLegalBase: { type: "string", example: "Main Legal Base" },
+                title: { type: "string", example: "Análise Trabalhista - Horas Extras" },
+                viabilityLabel: { type: "string", example: "Viável" },
+                analysisText: { type: "string", example: "O cliente possui evidências suficientes para comprovar o trabalho em regime de horas extras." },
+                estimatedComplexity: { type: "string", example: "Média" },
+                mainLegalBase: { type: "string", example: "Art. 59 da CLT" },
             },
-            required: ["id", "title", "viabilityLabel", "analysisText", "estimatedComplexity", "mainLegalBase"],
+            required: ["title", "viabilityLabel", "analysisText", "estimatedComplexity", "mainLegalBase"],
         },
     })
     @ApiResponse({
@@ -45,11 +50,15 @@ export class EditCaseAnalysisController {
         description: "Case analysis updated successfully",
     })
     @ApiResponse({
-        status: 400,
-        description: "Validation failed or other bad request error",
+        status: 404,
+        description: "Case analysis not found",
     })
-    async handle(@Body(new ZodValidationPipe(editCaseAnalysisBodySchema)) body: EditCaseAnalysisBodySchema) {
-        const { id, title, viabilityLabel, analysisText, estimatedComplexity, mainLegalBase } = body;
+    async handle(
+        @Param(new ZodValidationPipe(editCaseAnalysisParamsSchema)) params: EditCaseAnalysisParamsSchema,
+        @Body(new ZodValidationPipe(editCaseAnalysisBodySchema)) body: EditCaseAnalysisBodySchema,
+    ) {
+        const { id } = params;
+        const { title, viabilityLabel, analysisText, estimatedComplexity, mainLegalBase } = body;
 
         const result = await this.editCaseAnalysis.execute({
             id,
