@@ -1,7 +1,15 @@
 import { LeadNotFoundError } from "@/domain/crm/application/use-cases/errors/lead-not-found-error";
 import { GetLeadUseCase } from "@/domain/crm/application/use-cases/lead/get-lead";
 import { Controller, Get, Param, NotFoundException, InternalServerErrorException, Inject } from "@nestjs/common";
-import { ApiResponse, ApiTags } from "@nestjs/swagger";
+import { ApiParam, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { z } from "zod";
+import { ZodValidationPipe } from "../../../pipes/zod-validation-pipe";
+
+const getLeadParamsSchema = z.object({
+  id: z.uuid(),
+});
+
+type GetLeadParamsSchema = z.infer<typeof getLeadParamsSchema>;
 
 @ApiTags("Leads")
 @Controller("/leads/:id")
@@ -12,9 +20,12 @@ export class GetLeadController {
   ) {}
 
   @Get()
+  @ApiParam({ name: "id", type: "string", example: "123e4567-e89b-12d3-a456-426614174000" })
   @ApiResponse({ status: 200, description: "Lead fetched successfully" })
   @ApiResponse({ status: 404, description: "Lead not found" })
-  async handle(@Param("id") id: string) {
+  async handle(@Param(new ZodValidationPipe(getLeadParamsSchema)) params: GetLeadParamsSchema) {
+    const { id } = params;
+
     const result = await this.getLead.execute({ id });
 
     if (result.isLeft()) {
